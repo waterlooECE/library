@@ -1,0 +1,526 @@
+ 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+
+<html><head><title>SPCL: Slim Fly: A Cost Effective Low-Diameter Network Topology</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../../spcl.css" type="text/css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script></head>
+<body>
+<script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-48781228-1', 'ethz.ch');
+    ga('send', 'pageview');
+
+    </script><div id="header"><div id="header_eth_logo"><a href="https://www.ethz.ch"><img src="/.img/eth_logo_kurz_neg.png" width="164" height="60" alt="ETH Zurich"/></a></div><div id="header_wrap"><div id="header_logo"><img src="/.img/logo.png" width="253" height="40" alt="SPCL"/></div><div id="header_title"><a href="/index.php">Scalable Parallel Computing Lab</a></div></div></div><div id="wrap">
+<div id="content">
+<div id='cssmenu'>
+<ul>
+<li><a href='../../../Home/'><span>Home</span></a></li>
+<li><a href='../../../People/'><span>People</span></a></li>
+<li><a href='../../../Jobs/'><span>Jobs</span></a></li>
+<li><a href='../../../Visit/'><span>Visit</span></a></li>
+<li><a href='../../../SeMa/'><span>Thesis Topics</span></a></li>
+<li><a href='../../../Publications/'><span>Publications</span></a></li>
+<li><a href='../../../Research/'><span>Research</span></a></li>
+<div id="indent">
+<ul>
+<li><a href='../../../Research/Performance/'><span>Performance</span></a></li>
+<li><a href='../../../Research/Parallel_Programming/'><span>Parallel Programming</span></a></li>
+<li><a href='../../../Research/Security/'><span>Secure Communication</span></a></li>
+<li><a href='../../../Research/Scalable_Networking/'><span>Scalable Networking</span></a></li>
+<div id="indent_t">
+<ul>
+<li><a href='../../../Research/Scalable_Networking/DFSSSP/'><span>DFSSSP</span></a></li>
+<li><a href='../../../Research/Scalable_Networking/Network_Topologies/'><span>Network Topologies</span></a></li>
+<li><a href='../../../Research/Scalable_Networking/ORCS/'><span>ORCS</span></a></li>
+<li><a href='../../../Research/Scalable_Networking/Ethernet_BTL/'><span>Ethernet BTL</span></a></li>
+<li><a href='../../../Research/Scalable_Networking/FIP/'><span>FIP</span></a></li>
+<li><a href='../../../Research/Scalable_Networking/DFDN/'><span>DFDN</span></a></li>
+<li><a href='../../../Research/Scalable_Networking/ATLAHS/'><span>ATLAHS</span></a></li>
+<li><a href='../../../Research/Scalable_Networking/Nue/'><span>Nue</span></a></li>
+<li><a href='../../../Research/Scalable_Networking/SMI/'><span>SMI</span></a></li>
+<li><a href='../../../Research/Scalable_Networking/FatPaths/'><span>FatPaths</span></a></li>
+<li><a href='../../../Research/Scalable_Networking/SlimFly/'><span>SlimFly</span></a></li>
+</ul>
+</div>
+</ul>
+</div>
+<li><a href='../../../Bcast/'><span>Bcast</span></a></li>
+<li><a href='../../../Teaching/'><span>Teaching</span></a></li>
+<li><a href='../../../Contact/'><span>Contact</span></a></li>
+</ul>
+<table width="140">
+    
+    <tr>
+      <td height="40" align="center">
+	    <div class="l_title">SPONSORS</div>
+      </td>
+    </tr>
+    
+    <tr>
+      <td align="center" bgcolor="#FFFFFF">
+
+
+	<table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+	    <td class="logo" height="40" align="center" valign="center">
+        <a href="http://www.google.com"><img src="/.img/Google.png" border="0"></a>
+	    </td>
+	  </tr>
+
+	  <tr>
+	    <td class="logo" height="75" align="center" valign="center">
+	      <a href="http://www.intel.com"><img src="/.img/Intel.png" border="0"></a>
+	    </td>
+	  </tr>
+	  
+	  <tr>
+	    <td class="logo" height="65" align="center" valign="center">
+	      <a href="http://www.ibm.com/us/en/"><img src="/.img/IBM.jpg" border="0"></a>
+	    </td>
+	  </tr>
+          
+    <tr>
+	    <td class="logo" height="65" align="center" valign="center">
+	      <a href="http://www.nvidia.com/"><img src="/.img/Nvidia.png" border="0"></a>
+	    </td>
+    </tr>
+	</table>
+
+
+</table>
+<br><br>
+<table width="140">
+	
+    
+    <tr>
+      <td height="40" align="center">
+	    <div class="l_title">COLLABORATIONS</div>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" bgcolor="#FFFFFF">
+	<table border="0" cellpadding="0" cellspacing="0">
+          <tr>
+	    <td class="logo" height="60" align="center" valign="center">
+      <a href="http://www.cscs.ch/"><img src="/.img/CSCS.jpg" border="0"></a>
+	      </td>
+	  </tr>
+          
+
+          <tr>
+	    <td class="logo" height="60" align="center" valign="center">
+	      <a href="http://www.meteoswiss.ch/"><img src="/.img/Meteo.jpg" border="0"></a>
+	      </td>
+	  </tr>
+          <tr>
+	    <td class="logo" height="60" align="center" valign="center">
+	      <a href="http://pollylabs.org/"><img height="43px" src="/.img/pollylabs.png" border="0"></a>
+	      </td>
+	  </tr>
+          
+          <tr>
+	    <td class="logo" height="60" align="center" valign="center">
+	      <a href="http://www.anl.gov/"><img src="/.img/ANL.jpg" border="0"></a>
+	      </td>
+	  </tr>
+            
+          <tr>
+	    <td class="logo" height="60" align="center" valign="center">
+	      <a href="https://www.washington.edu/"><img src="/.img/uw.jpg" style="width:110px;" border="0"></a>
+	      </td>
+	  </tr>
+          
+	  <tr>
+	    <td class="logo" height="60" align="center" valign="center">
+	      <a href="http://www.sandia.gov/"><img src="/.img/sandia.png" style="width:110px;" border="0"></a>
+	      </td>
+	  </tr>
+	  
+          <tr>
+	    <td class="logo" height="60" align="center" valign="center">
+                <a href="http://www.llnl.gov/"><img src="/.img/LLNL.png" border="0"></a>
+	    </td>
+	  </tr>
+          <tr>
+	    <td class="logo" height="60" align="center" valign="center">
+                <a href="http://www.tu-darmstadt.de/"><img src="/.img/darmstadt.png" border="0"></a>
+	    </td>
+	  </tr>
+      <tr>
+	    <td class="logo" height="60" align="center" valign="center">
+                <a href="http://www.titech.ac.jp/english/"><img src="/.img/tokiotech.jpg" style="width:110px;" border="0"></a>
+	    </td>
+	  </tr>
+      <tr>
+	    <td class="logo" height="60" align="center" valign="center">
+                <a href="http://www.illinois.edu/"><img src="/.img/uiuc.jpg" style="width:110px;" border="0"></a>
+	    </td>
+	  </tr>
+
+	</table>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div id="main">
+ 
+
+<h3>Slim Fly: A Cost Effective Low-Diameter Network Topology</h3>
+
+<h4>The key idea in a single sentence</h4>
+<p>
+<b>"It's ALL about the diameter!": Optimize your topology for low diameter to not only reduce
+the latency (due to shorter paths) but also cost and power consumption as packets will traverse and thus require
+fewer routers and cables.</b>  
+</p>
+<br>
+<br>
+
+<h4>Key motivation</h4>
+<p>
+Interconnection networks play an important role in today's large-scale
+computing systems. An ideal topology should ensure: high bandwidth, low
+total system cost and energy consumption, low endpoint-to-endpoint latency, and
+resiliency to link failures. We develop the Slim Fly topology that achieves all
+these goals by lowering the diameter.
+</p>
+<br>
+
+<!-- <b>The key idea and motivation:</b> -->
+<p></p><center>
+<img width="550" src=".img/idea-both.png" alt=".img/idea-both.png">
+<br>
+<i>
+<b>The key idea and motivation:</b> On the left, a topology has a diameter of 3; two communicating endpoints
+require 3 hops. On the right, the topology has been rearranged so that the diameter is
+2. Thus, packets require fewer routers and cables, which reduces dynamic power
+(fewer SerDes traversed), static power (fewer powered resources) and the cost
+(less equipment). At the same time, the endpoint density was increased to preserve
+the number of endpoints. Here, we take advantage of today's technological
+advances that enable cheap manufacturing of high-radix routers.
+</i>
+</center>
+<br><br>
+
+
+<!-- <b>A comparison between a full-bandwidth fat tree and a Slim Fly:</b>-->
+<p></p><center>
+<img width="550" src=".img/motivation.png" alt=".img/motivation.png"  style="border:1px solid black"> 
+<!-- <img width="550" src=".img/motivation.png" alt=".img/motivation.png" > -->
+<br>
+<i>
+<b>A comparison between a full-bandwidth fat tree and a Slim Fly:</b> Both topologies offer
+high bandwidth, while SF reduces the number of routers (>50%) and cables (>30%).
+</i>
+</center>
+<br><br>
+
+
+<h4>Key method (of lowering the diameter)</h4>
+<p>
+We optimize the structure of Slim Fly towards the Moore Bound, a well-known
+concept in graph theory; see a figure below for an overview.  The Moore Bound
+(MB) determines the maximum number of vertices that a potential graph with a
+given vertex degree and diameter can have. <i>We use the MB concept in our
+construction scheme and we define it to be the upper limit on the number of
+radix-k routers that a network with a given diameter D can contain.</i> To
+connect the routers, we first fix D and k, and then use/construct graphs with these D and
+k that are close to the MB.  We focus on D=2 (but also briefly analyze D=3) and we select k to match the radix
+of available routers.  In this way, we maximize the number of attached
+endpoints for a given D and k.  This minimizes the cost per endpoint:
+intuitively, <i>using graphs close to the MB enables the Slim Fly network to be
+as "inflated" with endpoints as possible for a given D and k, thus minimizing
+cost/power consumption per endpoint</i>.
+<br><br>
+If you want to see in more detail how to connect the routers in a Slim Fly, scroll down to the section "Constructing Slim Fly".
+<!-- Intuitively, we
+use graphs with the lowest diameter for a given router radix and is, in this sense,
+approaching the optimal diameter for a given router technology. -->
+</p>
+<br>
+
+<!-- <b>The notion of Moore Bound in more detail:</b>-->
+<p></p><center>
+<img width="550" src=".img/mb-improved.png" alt=".img/mb-improved.png">
+<br>
+<i>
+<b>The notion of Moore Bound in more detail</b>.
+</i>
+</center>
+<br><br>
+
+
+<h4>Key method (of attaching the endpoints)</h4>
+<p>
+We select the number of endpoints p attached to one router to
+maximize the total cumulative throughput (i.e., the global bandwidth) in the all-to-all
+communication pattern. We select all-to-all because this is
+a common traffic pattern in various HPC and Big Data codes.
+We derive p by modeling analytically the average amount
+of traffic in the all-to-all pattern and then ensuring that both injection
+links and router-to-router links bear the same amount of traffic (balancedness).
+<br><br>
+If you want to see in more detail how to attach the endpoints in a Slim Fly, scroll down to the section "Constructing Slim Fly".
+</p>
+<br>
+<br>
+
+
+<h4>Constructing Slim Fly</h4>
+<p>
+We present an intuitive high-level description of Slim Fly's structure below.
+The full description is in the paper and also in the slides;
+<u>references and links are at the bottom of the page</u>.
+</p>
+
+<!--
+<p>
+[Stay tuned - we are preparing a short video that illustrates the design
+process (connecting routers and attaching endpoints) in more details.  For the
+moment, the full description is in the paper and also in the slides;
+<u>references and links are at the bottom of the page</u>.]
+</p>
+<br>
+-->
+
+<br><br>
+
+<p></p><center>
+<img width="500" src=".img/sf-subgroups-1.png" alt=".img/sf-subgroups-1.png">
+<br>
+<i>
+<b>The structure of Slim Fly: part 1:</b> 
+Each Slim Fly consists of two <u>subgraphs</u>. Each of these two subgraphs consists of
+the same number of <u>groups</u> of routers. Within one subgraph, there are cables within
+each group, but the groups are not connected with one another. The cabling pattern in
+each group (in one subgraph) is identical, and usually different from the cabling 
+pattern inside groups in the other subgraph.
+</i>
+</center>
+<br><br>
+
+<p></p><center>
+<img width="500" src=".img/sf-subgroups-2.png" alt=".img/sf-subgroups-2.png">
+<br>
+<i>
+<b>The structure of Slim Fly: part 2: </b>
+Groups are heavily connected across the subgraphs. They form a fully-connected
+bipartite graph (i.e., each group in one subgraph is connected to all the other
+groups in the other subgraph).
+</i>
+</center>
+<br><br>
+
+<p></p><center>
+<img width="500" src=".img/sf-subgroups-3.png" alt=".img/sf-subgroups-3.png">
+<br>
+<i>
+<b>The structure of Slim Fly: part 3: </b>
+For a simpler layout (e.g., in a data center), groups from different subgraphs can be
+rearranged and merged pairwise. As a result, such Slim Fly consists of identical
+<u>racks</u> and each rack has the same intra-rack cabling pattern. Racks form
+a fully-connected grapg (i.e., each rack is connected to all the other other racks).
+</i>
+</center>
+<br><br>
+
+
+
+<h4>Key findings and discoveries</h4>
+<p>
+<ol>
+<li><u>Low diameter is the key:</u> lowering the diameter reduces the
+latency as well as the cost and power consumption. The Slim Fly with
+diameter 2 preserves high bandwidth and outperforms all the comparison targets
+(both low-radix traditional networks and state-of-the-art high-radix designs)
+in cost, power consumption, and latency. 
+<li><u>Moore Graphs ensure desired network properties:</u> in addition to the
+above, graphs that approach the Moore Bound ensure high bandwidth and resilience.
+They also have structure of connections that allows for a data center or
+supercomputer rack-based layout. 
+</ol>
+</p>
+<br>
+<br>
+
+
+<h4>Selected interesting analyses</h4>
+<p>
+
+<p></p><br>
+<p></p><center>
+<img width="400" src=".img/avg.png" alt=".img/avg.png">
+<br>
+<i>
+<b>Average path length:</b> Slim Fly offers the lowest one.
+</i>
+</center>
+<br><br><br>
+
+<p></p><center>
+<img width="350" src=".img/cost.png" alt=".img/cost.png">
+<br>
+<i>
+<b>Total network cost (routers + cables):</b> Slim Fly offers the lowest one (25-30% better
+than that of Dragonfly).
+<b>Power consumption</b> follows fimilar trends.
+SF: Slim Fly, DF: Dragonfly, FBF-3: Flattened Butterfly (3 dimensions), DLN: random topologies,
+T3D: 3d torus, FT-3: a 3-level fat tree, T5D: 5d torus, HC: hypercube, LH: Long Hop.
+</i>
+</center>
+<br><br><br>
+
+<p></p><center>
+<img width="500" src=".img/res.png" alt=".img/res.png">
+<br>
+<i>
+<b>The resilience to link failures:</b>
+N is the number of endpoints. Network symbols are the same as in the cost analysis above.
+"-" indicates the lact of a specific network for a given size. Percentages are the
+numbers of link failures that are required to disconnect the network.
+</i>
+</center>
+<br><br><br>
+
+
+<p></p><center>
+<img width="500" src=".img/perf-extended.png" alt=".img/perf-extended.png">
+<br>
+<i>
+<b>Performance:</b> The latency for a random uniform traffic pattern.
+<!-- SF-VAL: Valiant routing on Slim Fly, SF-UGAL-L: adaptive routing on Slim Fly (local variant),
+SF-UGAL-G: adaptive routing on Slim Fly (global variant), SF-MIN: minimum static routing on
+Slim Fly, DF-UGAL-L: adaptive routing on Dragonfly, FT-ANCA: adaptive routing on fat trees. -->
+</i>
+</center>
+<br><br><br>
+
+
+
+<h4>Routing</h4>
+<p>
+
+We propose both minimum static and non-minimum adaptive routing schemes.
+Each scheme comes with deadlock-freedom guarantees.
+Again, check the paper for all the details.
+
+<p></p><br>
+<p></p><center>
+<img width="500" src=".img/routing.png" alt=".img/routing.png">
+<br>
+<i>
+<b>Minimum static routing</b>.
+</i>
+</center>
+<br><br><br>
+
+<p></p><center>
+<img width="500" src=".img/df-static.png" alt=".img/df-static.png">
+<br>
+<i>
+<b>Deadlock-freedom (in minimum static routing)</b>.
+</i>
+</center>
+<br><br><br>
+
+
+
+
+
+
+<h4>Download: ready Slim Flies and experiments</h4>
+<br>
+
+<center>
+<table border="1" width="500px">
+<tbody><tr>
+<td>Version</td>
+<td>Date</td>
+<td>Changes</td>
+</tr>
+
+<tr>
+<td><a href="sf.tar.gz">sf.tar.gz</a></td>
+<td>January, 2015</td>
+<td>First release</td>
+</tr>
+
+</tbody></table>
+</center>
+<br>
+
+The accompanying technical report is in the above archive. 
+<br><br>
+
+The generated Slim Flies can be found in the subfolder <u>graphs</u> of the archive. 
+<br><br>
+
+<p>
+The analyses include cost, bandwidth, resilience, and calculating load per edge in the all-to-all pattern.
+Performance experiments were conducted using the Booksim simulator (with a class Anynet). The link:
+<a href="http://nocs.stanford.edu/cgi-bin/trac.cgi/wiki/Resources/BookSim">booksim</a>.
+<br><br>
+
+
+
+<!--
+<p></p><center>
+<img width="550" src=".img/p-1.png" alt=".img/p-1.png">
+<br>
+<i>
+Attaching endpoints (part 1).
+</i>
+</center>
+<br><br>
+
+<p></p><center>
+<img width="550" src=".img/p-2.png" alt=".img/p-2.png">
+<br>
+<i>
+Attaching endpoints (part 1).
+</i>
+</center>
+<br><br>
+-->
+
+
+
+<h4>References</h4>
+
+<TABLE border=0><TR><TD bgcolor='gray' width=70 rowspan=3><center><font color='white'><b>SC'14</b></font></center></TD><TD colspan=2>
+<a name="slim-fly"></a>
+[1] <A style='font-weight: normal; text-decoration: underline' HREF="http://www.inf.ethz.ch/personal/maciej.besta">M. Besta</A>, <A style='font-weight: normal; text-decoration: underline' HREF="http://www.unixer.de">T. Hoefler</A>:</TD><TR><TD width=10>&nbsp;</TD><TD><B><a href="../../../Publications/index.php?pub=187">Slim Fly: A Cost Effective Low-Diameter Network Topology</a></B>
+<I> In Proceedings of the International Conference on High Performance Computing, Networking, Storage and Analysis (SC'14), presented in New Orleans, LA, USA, pages 348-359, IEEE Press, ISBN: 978-1-4799-5500-8, Nov. 2014, (acceptance rate: 21%, 82/394) </I> <FONT color='red'><B>SC'14 Best Student Paper (1/82) </B></FONT><BR><A HREF="../../../Publications/.pdf/sf_sc_2014.pdf"><IMG SRC='../../../Publications/.img/pdf.jpg' BORDER=0></A>
+<A HREF="https://arxiv.org/abs/1912.08968"><IMG SRC='../../../Publications/.img/arxiv.jpg' BORDER=0></A>
+<A HREF="../../../Publications/.pdf/sf_sc_slides_website.pdf"><IMG SRC='../../../Publications/.img/slides.png' WIDTH=16 BORDER=0></A>
+<A HREF=../../../Publications/bibtex.php?bibtex=187><IMG SRC='../../../Publications/.img/bib.jpg' BORDER=0></A>
+</FONT></TD></TR></TABLE>
+
+
+
+
+
+
+
+</div>
+<div id="right">
+
+<!--
+  Temporarily disable twitter...  
+  <a class="twitter-timeline" align="right" width="200" height="1407" data-dnt="true" href="https://twitter.com/spcl_eth"  data-widget-id="313655060053762048">Tweets by @spcl_eth</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+-->
+</div>
+
+	<div style="clear:both;"> </div>
+</div>
+</div>
+<div id="footer"><b>&copy; Copyright 2017 ETH Zurich, SPCL, Torsten Hoefler. All rights reserved.</b></div>
+</body>
+</html>

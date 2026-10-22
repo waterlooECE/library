@@ -1,0 +1,2031 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en_US">
+<head>
+    <base href="https://www.openstack.org/"><!--[if lte IE 6]></base><![endif]-->
+    <title>Containers Whitepaper: Leveraging Containers and Openstack - OpenStack is open source software for creating private and public clouds.</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="globalsign-domain-verification" content="tWFOHNAA_WMHmHfBMq38uTgupHFugV_dZ2rqyRxNMx" />
+
+    <meta name="title" content="Containers Whitepaper: Leveraging Containers and Openstack - OpenStack is open source software for creating private and public clouds." />
+<meta name="generator" content="SilverStripe - http://silverstripe.org" />
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<meta property="og:title" content="Containers Whitepaper: Leveraging Containers and Openstack - OpenStack Open Source Cloud Computing Software" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://www.openstack.org/use-cases/containers/leveraging-containers-and-openstack/" />
+<link rel="image_src" href="https://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-assets-prod/Uploads/openstack-vert.jpg" type="image/jpeg" />
+<meta property="og:image" content="http://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-assets-prod/Uploads/openstack-vert.jpg" />
+<meta property="og:image:secure_url" content="https://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-assets-prod/Uploads/openstack-vert.jpg" />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:height" content="135" />
+<meta property="og:image:width" content="240" />
+<meta property="og:site_name" content="OpenStack" />
+<meta property="og:locale" content="en_US" />
+<meta property="fb:app_id" content="209869746011654" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@openstack" />
+
+
+    <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="https://www.openstack.org/blog/feed/" />
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+
+// Used to record outbound links before the browser resets to the new site
+
+function recordOutboundLink(link, category, action) {
+  try {
+      ga('send', 'event', {
+          eventCategory: category,
+          eventAction: 'click',
+          eventLabel: link.href
+      });
+      setTimeout('document.location = "' + link.href + '"', 100)
+  }
+  catch(err){}
+}
+</script>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-T59Q8GH');</script>
+<!-- End Google Tag Manager -->
+
+<style>.async-hide { opacity: 0 !important} </style>
+<script>
+// Used to minimize flickering during GA A/B testing
+  (function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date;
+  h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
+  (a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null},c);h.timeout=c;
+  })(window,document.documentElement,'async-hide','dataLayer',4000,
+  {'GTM-5F7R6N4':true});
+</script>
+
+<script>
+// Google Analytics tracking script
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-17511903-1', 'auto');
+    ga('require', 'linker');
+    ga('linker:autoLink', ['openstack.org', 'eventbrite.com'] );
+    ga('require', 'GTM-5F7R6N4');
+    ga('send', 'pageview');
+
+    ga(function(tracker) {
+        var googleClientID = tracker.get('clientId');
+
+        $("a.eventbrite-register-link").each(function() {
+            var href = $(this).attr("href");
+            $(this).attr("href", href + '&_eboga=' + googleClientID);
+        });
+    });
+
+</script>
+
+    <script>(function(w,d,t,r,u){var f,n,i;w[u]=w[u]||[],f=function(){var o={ti:"56279414"};o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")},n=d.createElement(t),n.src=r,n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&s!=="loaded"&&s!=="complete"||(f(),n.onload=n.onreadystatechange=null)},i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)})(window,document,"script","//bat.bing.com/bat.js","uetq");</script>
+
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans:300,400,700" />
+<link rel="stylesheet" type="text/css" href="https://www.openstack.org/node_modules/font-awesome/css/font-awesome.min.css?m=1731693381" />
+<link rel="stylesheet" type="text/css" href="https://www.openstack.org/node_modules/@fortawesome/fontawesome-pro/css/all.min.css?m=1731693380" />
+<link rel="stylesheet" type="text/css" href="https://www.openstack.org/node_modules/bootstrap/dist/css/bootstrap.min.css?m=1731693380" />
+<link rel="stylesheet" type="text/css" href="https://www.openstack.org/themes/openstack/css/combined.css?m=1790782148" />
+<link rel="stylesheet" type="text/css" href="https://www.openstack.org/themes/openstack/css/navigation_menu.css?m=1790782149" />
+<link rel="stylesheet" type="text/css" href="https://www.openstack.org/themes/openstack/css/dropdown.css?m=1790782148" />
+<link rel="stylesheet" type="text/css" href="https://www.openstack.org/papers/css/paper-viewer-page.css?m=1790782153" />
+<link rel="stylesheet" type="text/css" href="https://www.openstack.org/papers/ui/production/css/paper-page.css" />
+</head>
+
+<body id="leveraging-containers-and-openstack">
+    
+
+<!-- Top Site Banner -->
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T59Q8GH"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<div class="top-site-banner">
+    <div class="container">
+        <div class="text">
+            Learn more about OpenStack's latest release, 2026.2 Hibiscus!
+        </div>
+        <div class="button">
+            <a href="https://www.openstack.org/software/openstack-hibiscus/" target="_blank" class="top-site-banner-button">Learn more</a>
+        </div>
+    </div>
+</div>
+<!-- End Site Banner -->
+
+
+    <nav class="navbar navbar-default global-nav" role="navigation">
+
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div class="brand-wrapper">
+                <a class="navbar-brand" href="/"></a>
+            </div>
+            <div class="search-icon show"><i class="fa fa-search"></i> <span class="header-search-text">Search</span></div>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <div class="search-container tiny">
+                <div class="openstack-search-bar" data-baseUrl="search.openstack.org" data-context="www-openstack"></div>
+           </div>
+           <ul class="nav navbar-nav navbar-main show">
+            <li>
+                <div class="openstack-search-bar ossw-mobile" data-baseUrl="search.openstack.org" data-context="www-openstack"></div>
+            </li>
+
+            <li>
+    <a href="https://www.openstack.org/software/" class="drop" id="dropdownMenuSoftware">Software <i class="fa fa-caret-down"></i></a><i class="mobile-expand"></i>
+    <ul class="dropdown-menu dropdown-hover" role="menu" aria-labelledby="dropdownMenuSoftware">
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/software/">Overview</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/software/project-navigator/openstack-components">OpenStack Components</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/software/project-navigator/sdks">SDKs</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/software/project-navigator/deployment-tools">Deployment Tools</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/openstack-map" target="_blank">OpenStack Map</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/software/sample-configs/">Sample Configs</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://security.openstack.org" target="_blank">Security</a></li>
+    </ul>
+</li>
+<li>
+    <a href="https://www.openstack.org/use-cases/" class="drop" id="dropdownMenuUsers">Use Cases <i class="fa fa-caret-down"></i></a><i class="mobile-expand"></i>
+    <ul class="dropdown-menu dropdown-hover" role="menu" aria-labelledby="dropdownMenuUsers">
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/vmware-migration-to-openstack/">VMware Migration to OpenStack</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/use-cases/">Users in Production</a></li>
+        <li role="presentation" class="divider"></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/use-cases/bare-metal/">Ironic Bare Metal</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/use-cases/edge-computing/">Edge Computing</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/use-cases/telecoms-and-nfv/">Telecom & NFV</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/use-cases/science/">Science and HPC</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/use-cases/containers/">Containers</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/use-cases/enterprise/">Enterprise</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/surveys/landing">User Survey</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/openstack-for-ai">AI</a></li>
+    </ul>
+</li>
+<li>
+    <a  class="drop" id="dropdownMenuEvents">Events <i class="fa fa-caret-down"></i></a><i class="mobile-expand"></i>
+    <ul class="dropdown-menu dropdown-hover" role="menu" aria-labelledby="dropdownMenuEvents">
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="//openinfra.dev/summit/">OpenInfra Summit</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/ptg/">Project Teams Gathering</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/events/opendev-2020/">OpenDev</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/events/community-events/">Community Events</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/events/openstackdays">OpenStack & OpenInfra Days</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/videos/">Summit Videos</a></li>
+    </ul>
+</li>
+
+<li>
+    <a href="https://www.openstack.org/community/" class="drop" id="dropdownMenuCommunity">Community <i class="fa fa-caret-down"></i></a><i class="mobile-expand"></i>
+    <ul class="dropdown-menu dropdown-hover" role="menu" aria-labelledby="dropdownMenuCommunity">
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/community/">Welcome! Start Here</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/community/tech-committee">OpenStack Technical Committee</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/community/speakers/">Speakers Bureau</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/community/members/">Community Members</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="http://wiki.openstack.org">OpenStack Wiki</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/coa/">Get Certified (COA)</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/community/jobs/">Jobs</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/marketing/">Marketing Resources</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/news/">Community News</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="http://superuser.openstack.org">Superuser Magazine</a></li>
+        <li role="presentation" class="divider"></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/community/supporting-organizations/">OpenInfra Foundation Supporting Organizations</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://openinfra.dev">OpenInfra Foundation</a></li>
+    </ul>
+</li>
+<li>
+    <a href="https://www.openstack.org/marketplace/" class="drop" id="dropdownMenuCommunity">Marketplace <i class="fa fa-caret-down"></i></a><i class="mobile-expand"></i>
+    <ul class="dropdown-menu dropdown-hover" role="menu" aria-labelledby="dropdownMenuEvents">
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/marketplace/training/">Training</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/marketplace/distros/">Distros & Appliances</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/marketplace/public-clouds/">Public Clouds</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/marketplace/hosted-private-clouds/">Hosted Private Clouds</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/marketplace/remotely-managed-private-clouds/">Remotely Managed Private Clouds</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/marketplace/consulting/">Consulting & Integrators</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://www.openstack.org/marketplace/drivers/">Drivers</a></li>
+    </ul>
+</li>
+<li>
+    <a href="https://www.openstack.org/blog/">Blog</a>
+</li>
+<li>
+    <a href="http://docs.openstack.org/">Docs</a>
+</li>
+<li>
+
+</li>
+
+
+            <li>
+            
+                <li class="join-nav-section">
+                    <a href="#" id="dropdownMenuJoin">Join <i class="fa fa-caret-down"></i></a>
+                    <ul class="dropdown-menu dropdown-hover" role="menu" aria-labelledby="dropdownMenuJoin" style="display: none;">
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://openinfra.dev/join">Sign up for Foundation Membership</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://openinfra.dev/join">Sponsor the Foundation</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="https://openinfra.dev">More about the Foundation</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/Security/login/?BackURL=https://www.openstack.org/use-cases/containers/leveraging-containers-and-openstack/" class="sign-in-btn">Log In</a>
+                </li>
+            
+            </li>
+        </ul>
+    </div>
+    <!-- /.navbar-collapse -->
+</div>
+<!-- /.container -->
+</nav>
+
+    <!-- Page Content -->
+    
+    <div class="row">
+    <div class="col-xs-6 col-md-3">
+        <div id="language-selector"></div>
+    </div>
+    <div class="col-xs-6 col-md-9">
+        <a target="_blank" title="Download as PDF" href="https://www.openstack.org/use-cases/containers/leveraging-containers-and-openstack/pdf"><i class="fa fa-file-pdf-o pdf-export" aria-hidden="true"></i></a>&nbsp;<span>Download as PDF</span>
+    </div>
+    </div>
+    </div>
+
+<div class="intro-header text-center" style="background: url(https://www.openstack.org/papers/img/default_bg.jpg) center; ">
+    <h1>Leveraging Containers and OpenStack</h1>
+    
+        <h2>A Comprehensive Review</h2>
+    
+</div>
+<section class="containers-page">
+    <div id="paper-nav" class="navigation stick-top">
+        <div class="container">
+            <div class="group">
+                <button id="btnPrv" class="btn" disabled>
+                    <i class="fa fa-caret-left"></i>
+                </button>
+                <button id="btnNxt" class="btn">
+                    <i class="fa fa-caret-right"></i>
+                </button>
+            </div>
+            <div class="dropdown" role="tablist" id="chapters">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="true">&nbsp;Introduction
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-target="introduction">Introduction</a>
+                        </li>
+                        
+                    
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-target="i-a-high-level-view-of-containers-in-openstack">I. A High Level View of Containers in OpenStack</a>
+                        </li>
+                        
+                    
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-target="ii-openstack-container-integration-points">II. OpenStack Container Integration Points</a>
+                        </li>
+                        
+                    
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-target="iii-case-studies">III. Case Studies</a>
+                        </li>
+                        
+                            <ul class="sub-dropdown-menu">
+                                
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#" data-target="at-and-t">AT&amp;T</a>
+                                    </li>
+                                
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#" data-target="cern">Cern</a>
+                                    </li>
+                                
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#" data-target="sk-telecom">SK Telecom</a>
+                                    </li>
+                                
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#" data-target="superfluidity">Superfluidity</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-target="iv-conclusion">IV. Conclusion</a>
+                        </li>
+                        
+                    
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-target="v-open-source-project-index">V. Open Source Project Index</a>
+                        </li>
+                        
+                    
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-target="vi-authors">VI. Authors</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container content">
+        <div class="row section regular" id="introduction">
+    <div class="col-lg-12">
+        <h3 class="text-center title">Introduction</h3>
+        
+        
+            
+                <p>Imagine that you are tasked to build an entire private cloud infrastructure from the ground up. You have a limited budget, a small but dedicated team, and are asked to pull off a miracle.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p>A few years ago, you’d build an infrastructure with applications running in virtual machines, with some bare-metal machines for legacy applications. As infrastructure has evolved, virtual machines (VMs) enabled greater levels of efficiency and agility, but VMs alone don’t completely meet the needs of an agile approach to application deployment. They continue to serve as a foundation for running many applications, but increasingly, developers are looking toward the emerging trend of containers for leading-edge application development and deployment because containers offer increased levels of agility and efficiency.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p>Container technologies like <a href="https://www.docker.com/open-source-0" target="_blank">Docker</a> and <a href="https://kubernetes.io" target="_blank">Kubernetes</a> are becoming the leading standards for building containerized applications. They help free organizations from complexity that limits development agility. Containers, container infrastructure, and container deployment technologies have proven themselves to be very powerful abstractions that can be applied to a number of different use cases. Using something like Kubernetes, an organization can deliver a cloud that solely uses containers for application delivery.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p>But a leading-edge private cloud isn’t just about containers, and containers aren’t appropriate for all workloads and use cases. Today, most private cloud infrastructures need to encompass bare-metal machines for managing infrastructure, virtual machines for legacy applications, and containers for newer applications. The ability to support, manage and orchestrate all three approaches is the key to operational efficiency.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p><a href="https://openstack.org" target="_blank">OpenStack</a> is currently the best available option for building private clouds, with the ability to manage networking, storage and compute infrastructure, with support for virtual machines, bare-metal, and containers from one control plane. While Kubernetes is arguably the most popular container orchestrator and has changed application delivery, it depends on the availability of a solid cloud infrastructure, and OpenStack offers the most comprehensive open source infrastructure for hosting applications. OpenStack’s multi-tenant cloud infrastructure is a natural fit for Kubernetes, with several integration points, deployment solutions, and ability to federate across multiple clouds.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p>In this paper, we’re going to explore how containers work within OpenStack, examine various use cases, and provide an overview of open source projects, from OpenStack and elsewhere, that help make containers a technology that’s easily adopted and utilized.</p>
+            
+            
+            
+            
+            
+        
+            
+            
+                <p class="text-center"><img src="https://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-images-prod/containers2/intro-diagram.svg" alt="Table 1" class="hover-shadow clickable-image"></p>
+            
+            
+            
+            
+        
+    </div>
+</div>
+<div class="row section regular" id="i-a-high-level-view-of-containers-in-openstack">
+    <div class="col-lg-12">
+        <h3 class="text-center title">I. A High Level View of Containers in OpenStack</h3>
+        
+        
+            
+                <p>There are three primary scenarios where containers and OpenStack intersect.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p>The first scenario, called infrastructure containers, allows operators to leverage containers in a way that improves cloud infrastructure deployment, management, and operation. In this scenario, containers are set up on a bare-metal infrastructure, and are allowed privileged access to host resources. This access allows them to take direct advantage of compute, networking, and storage resources that container runtimes are typically trying to hide from users. The containers isolate the often complex set of dependencies that each application depends on, while still allowing the infrastructure applications to directly manage and manipulate the underlying system resources. When the time comes to upgrade an service, the upgrade can be handled without changes in dependencies disrupting co-located services.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p>Modern versions of OpenStack have embraced this infrastructure container model, and it’s now normal to manage an entire lifecycle of an OpenStack deployment with a combination of orchestration tooling and containerized services. Infrastructure containers enable operators to use container orchestration technologies to solve many issues, particularly around rapidly iterating/upgrading existing software including OpenStack. Running OpenStack within containers helps operators to solve Day 2 challenges, including adding new components for services, upgrading versions of software quickly, and rapidly rolling updates across machines and data centers. This approach brings the agility of containers to the problem of OpenStack deployment and upgrades.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p>The second scenario is concerned with hosting containerized application frameworks on cloud infrastructure. These can include Container Orchestration Engines (COEs) like Docker Swarm and Kubernetes, or lighter-weight container-focused services and serverless application programming interfaces (APIs). Whether on bare-metal or VMs, the OpenStack community has worked to ensure that it’s possible to deliver containerized applications on a secure, tenant-isolated cloud host. This scenario is facilitated by drivers that allow projects like Kubernetes to directly take advantage of OpenStack APIs for storage, load-balancing, and identity. It also includes APIs for provisioning managed Kubernetes clusters and application containers on demand. With these capabilities, development teams can write new containerized applications and quickly provision Kubernetes clusters on OpenStack clouds. It’s a complete application lifecycle solution that gives them the resources needed to develop, test, and debug their code, with robust automation to deploy their applications into production.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p>In the final scenario, we consider the interactions between independent OpenStack and COE deployments, and in this paper particularly Kubernetes clusters. Consistency and interoperability of APIs across both OpenStack and Kubernetes clusters is the primary source of success for this scenario. For example, it’s possible for Kubernetes to directly attach to <a href="https://docs.openstack.org/cinder/latest/" target="_blank">OpenStack Cinder</a> hosted volumes, use <a href="https://docs.openstack.org/keystone/latest/" target="_blank">OpenStack Keystone</a> as an authorization and authentication backend, or connect to <a href="https://docs.openstack.org/neutron/latest/" target="_blank">OpenStack Neutron</a> as a network overlay with <a href="https://docs.openstack.org/kuryr/latest/" target="_blank">OpenStack Kuryr</a>. Conversely, it’s possible for an OpenStack cloud to share the same network overlay as a Kubernetes cluster with Neutron drivers for projects like <a href="https://www.projectcalico.org" target="_blank">Calico</a>. The third scenario is less focused on how a cloud service is hosted (be it Kubernetes or OpenStack), and more on how independent services interact.</p>
+            
+            
+            
+            
+            
+        
+    </div>
+</div>
+<div class="row section regular" id="ii-openstack-container-integration-points">
+    <div class="col-lg-12">
+        <h3 class="text-center title">II. OpenStack Container Integration Points</h3>
+        
+            <h4 class="subtitle">Deploying OpenStack Infrastructure on Containers</h4>
+        
+        
+            
+                <p>As noted in the introduction, the deployment and management of OpenStack has changed significantly with the rise of containers, because containers unlock new approaches to managing infrastructure code. Previous management strategies required either the creation and maintenance of heavyweight golden machine images, or using brittle state-maintaining configuration-management systems. Each approach comes with complexities and restrictions. Adding to the degree of difficulty is the management of a collection of services that all require their own dependencies that change from release-to-release. Without some form of application isolation, solving for the dependencies becomes difficult if not impossible.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p>Infrastructure containers enable new OpenStack deployment projects to strike a balance between the two while elegantly solving the dependency problem. Using lightweight, independent, self-contained, and typically stateless application containers, a cloud operator gains tremendous flexibility when deploying a complex control plane. Combined with a container runtime and an orchestration engine, infrastructure containers make it possible to quickly deploy, maintain, and upgrade complex and highly available infrastructure.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p>In building an OpenStack cluster, there are several dimensions for choosing deployment technologies. An operator could choose <a href="https://linuxcontainers.org" target="_blank">Linux Containers</a> (LXC) or Docker for their base containers, use pre-built or custom-built application containers, and select either traditional configuration-management systems for orchestration or a more modern approach like Kubernetes. Table 1 summarizes the existing OpenStack deployment projects and their underlying technologies.</p>
+            
+            
+            
+            
+            
+        
+            
+            
+                <p class="text-center"><img src="https://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-images-prod/containers2/table.svg" alt="Table 1"></p>
+            
+            
+            
+            
+        
+            
+                <p>Underlying each of these deployment systems are different approaches to building a set of containers for the OpenStack code and supporting services. The OpenStack Ansible (OSA) and Kolla projects provide their own project-hosted build systems, while LOCI focuses on building project application containers, without a specific orchestration system in mind. At a high level, the differences are:</p>
+            
+            
+            
+            
+            
+        
+            
+            
+            
+            
+            
+                
+                
+                    <ol>
+    
+        <li>
+            OSA is unique in that it relies on lower-level LXC containers, and has a custom build system for creating LXC application containers.
+            
+        </li>
+    
+        <li>
+            The Kolla build system produces Docker containers, one for each service, along with supporting containers for initializing and managing an OpenStack deployment. Kolla containers are highly configurable, with a choice of base operating system, source or package installations, and a template engine for even further customization.
+            
+        </li>
+    
+        <li>
+            The final option for building OpenStack application containers is LOCI. LOCI also builds Docker containers, and delivers one container for each project. LOCI is focused on producing compact and secure containers quickly, for all common distributions, with the expectation that they will be used as a foundation to build upon by the deployment system.
+            
+        </li>
+    
+</ol>
+                
+            
+        
+            
+            
+            
+            
+                <h5 class="highlight">Bare-Metal Infrastructure - OpenStack and Solving the Bootstrap Problem</h5>
+            
+            
+        
+            
+                <p>At the foundation of every cloud, there exists a data center of bare-metal servers that host the infrastructure services. Even “serverless computing” is running software on a cloud on hardware in a data center. The problem of how to bootstrap hardware infrastructure is a critical problem that OpenStack software is uniquely qualified to address in a way that gives cloud-like qualities to bare-metal management.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p><a href="https://docs.openstack.org/ironic/latest/" target="_blank">OpenStack Ironic</a> provides bare-metal as a service. As a standalone service it can discover bare-metal nodes, catalog them in a management database, and manage the entire server lifecycle including enrolling, provisioning, maintenance, and decommissioning. When used as a driver to <a href="https://docs.openstack.org/nova/latest/" target="_blank">OpenStack Nova</a> and combined with the full suite of OpenStack services, it delivers a powerful, cloud-like service for managing your entire bare-metal infrastructure.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p>This raises the question: How does one bootstrap OpenStack services to manage bare-metal infrastructure? One typical solution is to use the same container-based installation tools as described in the previous sections to create a seed installation. This seed, often called an ‘undercloud’, can be used to entirely automate the management of a bare-metal cluster as if it were a virtualized cloud.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p>This opens up an opportunity to not just run OpenStack virtualization on a bare-metal cloud, but to also run bare-metal Kubernetes-only installations that can take full advantage of the identity, storage, networking, and other cloud APIs available through OpenStack services.</p>
+            
+            
+            
+            
+            
+        
+            
+            
+            
+                <h4 class="subtitle">Delivering Container-Based Applications on OpenStack</h4>
+            
+            
+            
+        
+            
+                <p>Both infrastructure containers and bare-metal infrastructure are important, but when most people think of containers, they’re thinking of application containers. The isolation, encapsulation, and ease of maintenance offered by containers makes them an ideal solution for delivering applications. However, containers still need a host platform to serve them from, whether bare-metal, public cloud, or private cloud.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p>Kubernetes is a platform for delivering applications, and works best with cloud-APIs that can automate the delivery of critical infrastructure such as permanent storage, load-balancers, networks, and dynamic allocation of compute nodes. OpenStack delivers cloud infrastructure, whether as an on-prem private cloud or through any of the available public or managed OpenStack clouds.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p>OpenStack was one of the first upstream cloud providers for Kubernetes, with an active team of developers maintaining the "<a href="https://github.com/kubernetes/cloud-provider-openstack" target="_blank">Kubernetes/Cloud Provider OpenStack</a>" plugin. This plugin allows Kubernetes to take advantage of Cinder block storage, Neutron and <a href="https://docs.openstack.org/octavia/latest/" target="_blank">Octavia</a> Load Balancers, and direct management of compute resources with Nova. Using the provider is as simple as deploying the driver to your Kubernetes installation, setting a flag to load the driver, and providing your local user cloud credentials.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p>There are a number of solutions for installing Kubernetes and other application frameworks on top of OpenStack. One of the easiest ways to deliver container frameworks is to use <a href="https://docs.openstack.org/magnum/latest/" target="_blank">Magnum</a>, an OpenStack project that provides a simple API to deploy fully managed clusters backed by a choice of several application platforms, including Kubernetes. It’s an example of a Kubernetes deployment system that relies on OpenStack APIs and cloud provider plugin. For example, right now it’s being used to manage over 200 independent and federated <a href="https://openstack-in-production.blogspot.com/2017/01/containers-on-cern-cloud.html" target="_blank">Kubernetes installations on CERN’s OpenStack on-site cloud</a>, as well as on partner clouds. If you don’t have the Magnum API available to you in your preferred OpenStack cloud, you can use any other Kubernetes installation tools such as the <a href="https://github.com/kubernetes/kubeadm" target="_blank">kubeadm</a>, <a href="https://github.com/kubernetes/kubernetes-anywhere" target="_blank">Kubernetes Anywhere</a>, <a href="https://github.com/crosscloudci/cross-cloud" target="_blank">Cross-Cloud</a>, or <a href="https://github.com/kubernetes-incubator/kubespray" target="_blank">Kubespray</a>, to install and manage your Kubernetes cluster on OpenStack. Because each uses standard Kubernetes, it’s easy to enable the cloud provider interface to take advantage of storage and load balancing.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p><a href="https://docs.openstack.org/zun/latest/" target="_blank">Zun</a>, another OpenStack project, offers a lighter-weight container service API for managing individual containers without the need for managing servers or clusters.  An OpenStack-hosted Kubernetes cluster is elastic because it can be dynamically resized by adding or removing cloud resources to the cluster directly through the Nova API. Alternatively, Kubernetes can serve as a container backend to OpenStack Zun, turning over the management of the pod infrastructure to Zun. It offers a lighter-weight and multi-tenant container service API for running containers without the need for directly creating servers. Direct integration with Neutron and Cinder are used to provide networking and volumes for individual containers.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p>Finally, the Qinling project offers "Function as a Service" that aims to provide a platform to support serverless functions, similar to Lambda, Azure Functions, or Google Cloud Functions. It further abstracts the management of containers, and allows users to accelerate development with an event-driven, serverless compute experience that scales on demand. Qinling supports different container orchestration backends like Kubernetes and Docker swarm, a variety of popular function package storage backends like local storage and <a href="https://docs.openstack.org/swift/latest/" target="_blank">OpenStack Swift</a>.</p>
+            
+            
+            
+            
+            
+        
+            
+            
+            
+            
+                <h5 class="highlight">Kata Containers - Secure Applications through Virtualization</h5>
+            
+            
+        
+            
+                <p><a href="https://katacontainers.io/" target="_blank">Kata Containers</a>, a new open source project, is a novel implementation of a lightweight virtual machine that seamlessly integrates within the container ecosystem. Kata Containers are as light and fast as containers and integrate with the container management layers – including popular orchestration tools such as Docker and Kubernetes (k8s) – while also delivering the security advantages of VMs. Kata Containers adhere to the <a href="https://www.opencontainers.org" target="_blank">Open Container Initiative (OCI)</a> standard, which the OpenStack Foundation is an active member of. Kata Containers is hosted at the OpenStack Foundation, but is a separate project from the OpenStack project with its own governance and community.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p>The industry shift to containers presents unique challenges in securing user workloads within multi-tenant environments with a mix of both trusted and untrusted workloads. Kata Containers uses hardware-backed isolation as the boundary for each container or collection of containers in a pod. This approach addresses the security concerns of a shared kernel in a traditional container architecture.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p>Kata Containers is an excellent fit for both on-demand, event-based deployments such as continuous integration/continuous delivery, as well as longer running web server applications. Kata also enables an easier transition to containers from traditional virtualized environments, as it supports legacy guest kernels and device pass through capabilities. Kata Containers deliver enhanced security, scalability and higher resource utilization, while at the same time leading to an overall simplified stack.</p>
+            
+            
+            
+            
+            
+        
+            
+            
+                <p class="text-center"><img src="https://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-images-prod/containers2/kata-diagram5-r2.svg" alt="Intro" class="hover-shadow clickable-image"></p>
+            
+            
+            
+            
+        
+            
+            
+            
+                <h4 class="subtitle">Side-by-Side OpenStack and Kubernetes Integrations</h4>
+            
+            
+            
+        
+            
+                <p>One of the primary benefits of choosing open source platforms is in the stability of interfaces across standard deployments of those platforms. Both the OpenStack Foundation and the Cloud Native Computing Foundation (CNCF) maintain interoperability standards for OpenStack clouds and Kubernetes clusters, guaranteeing that libraries, applications, and drivers will work across all platforms regardless of where they are deployed. This creates opportunities for side-by-side integrations, allowing both OpenStack and Kubernetes to take advantage of the resources provided by the other.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p>The OpenStack Special Interest Group (SIG-OpenStack) in the Kubernetes community maintains the Cloud Provider OpenStack plugin. In addition to cloud provider interface for running Kubernetes on OpenStack, it also maintains several drivers that allows Kubernetes to take advantage of individual OpenStack services. These drivers include:</p>
+            
+            
+            
+            
+            
+        
+            
+            
+            
+            
+            
+                
+                    <ul>
+    
+        <li>
+            Two standalone Cinder drivers. A Flex Volume driver uses an exec-based model to interface with drivers, and a Container Storage Interface (CSI) driver which uses a standard interface for container orchestration systems to expose arbitrary storage systems to their container workloads. With support for over 70 storage drivers, these drivers make it possible to interface a wealth of battle tested proprietary and open source storage devices through a single Cinder API.
+            
+        </li>
+    
+        <li>
+            A webhook-based authentication and authorization interface to Keystone. Each mode, authentication and authorization, can be configured independently of one another. Though a work in progress, the interface supports a soft-multi-tenancy that backs Kubernetes RBAC with OpenStack Keystone.
+            
+        </li>
+    
+</ul>
+                
+                
+            
+        
+            
+                <p>Both OpenStack and Kubernetes support highly dynamic networking models that are backed by a variety of drivers. Because of these standard network interfaces, it’s easy to build standalone OpenStack and Kubernetes clusters with strong network integrations. Within OpenStack, the Kuryr project produces a Common Network Interface (CNI) driver that delivers Neutron networking to Docker and Kubernetes. On the flip side, there projects like Calico offer Neutron drivers, providing direct access to popular Kubernetes network overlays through standard Neutron APIs.</p>
+            
+            
+            
+            
+            
+        
+    </div>
+</div>
+<div class="row section" id="iii-case-studies">
+    <div class="col-lg-12">
+        <h3 class="text-center title">III. Case Studies</h3>
+        
+            
+                <p>Many members of the OpenStack community are contributing new code to various OpenStack projects relevant to containers, evaluating the implications and benefits of containers, and using containers in production to solve challenges and unlock new capabilities. This section highlights some of the most interesting case studies.</p>
+            
+            
+            
+            
+            
+        
+        <h6>Select a Case Study</h6>
+        <ul class="nav nav-tabs">
+            
+                <li class="active col-lg-3 col-sm-6 col-xs-12">
+                    <a data-toggle="tab" href="#at-and-t">
+                        <img class="logo" src="https://www.openstack.org/assets/" alt="AT&T">
+                    </a>
+                </li>
+            
+                <li class=" col-lg-3 col-sm-6 col-xs-12">
+                    <a data-toggle="tab" href="#cern">
+                        <img class="logo" src="https://www.openstack.org/assets/" alt="Cern">
+                    </a>
+                </li>
+            
+                <li class=" col-lg-3 col-sm-6 col-xs-12">
+                    <a data-toggle="tab" href="#sk-telecom">
+                        <img class="logo" src="https://www.openstack.org/assets/" alt="SK Telecom">
+                    </a>
+                </li>
+            
+                <li class=" col-lg-3 col-sm-6 col-xs-12">
+                    <a data-toggle="tab" href="#superfluidity">
+                        <img class="logo" src="https://www.openstack.org/assets/" alt="Superfluidity">
+                    </a>
+                </li>
+            
+        </ul>
+        <div class="tab-content">
+            
+                <div id="at-and-t" class="tab-pane fade in active">
+                <h4 class="subtitle">AT&T</h4>
+                    
+                        
+                            <p>AT&T, one of the largest telecommunications companies in the world, leverages container technology to deploy and manage OpenStack itself, relying on infrastructure containers to generate simplicity and efficiency, with the aim of building their 5G infrastructure on containerized OpenStack.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>To accomplish their goals, AT&T is using the OpenStack-Helm project to orchestrate LOCI-based OpenStack images across a Kubernetes cluster, also leveraging Kubernetes, Docker, and the core OpenStack services. They’re also using Bandit, Tempest, Patrole, and many other OpenStack projects. AT&T is also collaborating in the community to introduce a collection of undercloud projects called <a href="http://www.airshipit.org" target="_blank">Airship</a>, which will provision clouds from bare-metal to production-grade Kubernetes running OpenStack workloads.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                        
+                            <p class="text-center"><img class="medium-img" src="https://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-images-prod/containers2/att-diagram.jpg" alt="AT&T"></p>
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>AT&T is finding that containerization allows them to shift traditional deployment-type activities far to the left, and to validate them using CI/CD. Kubernetes additionally provides massive scalability and resiliency, as well as hooks to allow OpenStack-Helm to declaratively configure operational behavior, inject configuration, and accomplish rolling upgrades and updates without impacting tenant workloads.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>Leveraging container technology to deploy and manage OpenStack shouldn’t have much obvious impact on tenants — with the exception that they will have a more highly resilient platform, and will be able to get cloud features more frequently and with minimal interruption.  AT&T’s operations teams new experience will shift more of their efforts to defining the declarative configuration for a site, and to let the Kubernetes-oriented automation carry out the deployments themselves.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>AT&T aims to use this architecture to power the virtual network functions that form the backbone of its consumer and business-focused products and services. The initial use case for AT&T’s containerized Network Cloud will be the initial deployment of VNFs for the emerging 5G networking. OpenStack has been, is, and will be an excellent fit for AT&T’s VNF-focused cloud use cases. Containerization is simply an evolution that allows AT&T to deploy, manage, and scale their OpenStack infrastructure in a more reliable, rapid, zero-touch manner.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>Operationally, AT&T is still testing this approach but has committed to getting 5G service into production before the end of the year. OpenStack and container technology will form the backbone of this service, which is strategically important for AT&T’s millions of users. Deploying their 5G service will demonstrate the relevance of OpenStack and containers in a massively distributed production environment.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+            </div>
+            
+                <div id="cern" class="tab-pane fade">
+                <h4 class="subtitle">Cern</h4>
+                    
+                        
+                            <p>CERN, the European Organization for Nuclear Research, enables physicists and engineers to probe the fundamental structure of the universe, using the world’s largest and most complex scientific instruments to study the basic constituents of matter – the fundamental particles. The CERN cloud provides physicists with compute resources for scientific computing, analyzing data coming from the Large Hadron Collider and other experiments.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>CERN has been running OpenStack in production since 2013 and is now providing services for virtual machines, bare-metal and containers within a single cloud. Containers run on either virtual machines or bare-metal depending on the use cases, all provisioned via OpenStack Magnum. A selection of different container technologies are available including Kubernetes, Docker Swarm and DC/OS.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>CERN is currently running 250 container clusters provisioned through Magnum on top of OpenStack.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                        
+                            <p class="text-center"><img class="medium-img" src="https://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-images-prod/containers2/cern-diagram.jpg" alt="Cern"></p>
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>CERN’s OpenStack cloud gives users self-service access to request a configured container engine with a couple of commands or via a web GUI. This allows rapid utilization of the technologies and can scale to 1000s of nodes if needed. Best practice configurations are available with built in monitoring and integration into CERN storage and authentication services.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>Running this resource pool efficiently, scaling it without needing extra operations manpower requires consistent management processes and tools. Adding containers via Magnum on top of OpenStack enabled the service to use the automation previously developed, such as hardware repair processes and consistent authorisation models while supporting rapidly reallocation of resources depending on user needs.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>As a publicly funded laboratory, open source solutions such as Kubernetes and OpenStack provide a framework to collaborate with other organisations and give back to the communities. CERN has worked with a number of vendors through the <a href="https://openlab.cern/">CERN openlab framework</a>, such as Rackspace and Huawei, to provide clouds at scale with functionalities like Magnum and federation. These experiences are also shared through OpenStack Special Interest Groups, with other sciences such as the Square Kilometer Array (SKA), public presentations such as Kubecon Europe and blogs such as the <a href="http://openstack-in-production.blogspot.fr">OpenStack in Production</a>.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                        
+                            <p class="text-center"><img class="medium-img" src="https://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-images-prod/containers2/cern-diagram2.jpg" alt="Cern"></p>
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>At CERN, several workloads run within containers provisioned by Magnum, these include:</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                            
+                                <ul>
+    
+        <li>
+            Reana/Recast
+            
+                
+                    <ul>
+    
+        <li>
+            These tools provide a framework for executing reusable workflows in <a href="https://github.com/recast-hep"> High Energy Physics</a>. Containers offer the ability to package the analysis software and data in a single, easily shareable unit as well as easy scaling out both on-premises and using external resources. Work is scheduled as Kubernetes jobs based on Yadage Workflows supporting analysis and data preservation activities.
+            
+        </li>
+    
+</ul>
+                
+                
+            
+        </li>
+    
+        <li>
+            Spark as a Service
+            
+                
+                    <ul>
+    
+        <li>
+            Recently, Kubernetes was added as a resource manager for Spark. Spark can spawn drivers and executors as pods and Kubernetes is responsible for the scheduling and lifecycle. A team in the CERN IT department is developing a service where users can create Kubernetes clusters on demand with OpenStack Magnum and deploy Spark on Kubernetes, providing all the required integrations with CERN’s specialized filesystems and data sources in a secure way. Users with a few commands can effectively create a Spark deployment with the desired size, only for the time they need it and with the option to scale up or down their deployment while running.
+            
+        </li>
+    
+</ul>
+                
+                
+            
+        </li>
+    
+        <li>
+            LHC experiment detector trigger simulation for LHC upgrade
+            
+                
+                    <ul>
+    
+        <li>
+            The LHC is due to be upgraded to higher luminosity during the 2020s which requires significant enhancements in the experiment trigger farms which filter the collisions. Large scale Kubernetes clusters have been created to simulate the different approaches for the <a href="http://atlas.cern/" target="_blank">ATLAS</a> experiment and validate the design, resulting in some fine tuning of Kubernetes and OpenStack components.
+            
+        </li>
+    
+</ul>
+                
+                
+            
+        </li>
+    
+        <li>
+            Gitlab Continuous Integration Runners
+            
+                
+                    <ul>
+    
+        <li>
+            Gitlab enables users to build CI/CD jobs and execute them on shared or project specific runners. CERN users can leverage the CERN Container Service to test and build software, build and publish container images and documentation or set complex pipelines managing the full application lifecycle, including automated deployments into different environments.
+            
+        </li>
+    
+</ul>
+                
+                
+            
+        </li>
+    
+        <li>
+            Federated Kubernetes compute farms with external clouds
+            
+                
+                    <ul>
+    
+        <li>
+            CERN uses federations of Kubernetes clusters to support multi-cloud operations. Multiple clusters can be seamlessly integrated across clouds of varying technologies, including AWS, GCE and OpenStack clouds such as CERN and the T-Systems Open Telekom Cloud <a href="https://www.youtube.com/watch?v=2PRGUOxL36M" target="_blank">as demonstrated at Kubecon 2018</a>.
+            
+        </li>
+    
+</ul>
+                
+                
+            
+        </li>
+    
+</ul>
+                            
+                            
+                        
+                    
+                        
+                            <p>Integrating virtual machines, container engines and bare-metal under a single framework provides for easy views on usage accounting, ownership and quota. Manila storage drivers for Kubernetes allow transparent provisioning of file shares. This supports both the IT department in capacity planning and the experiment resource coordinators in defining the priorities for their working groups. Resource management policies such as reassignment or expiry of resources on departure of staff are handled in consistent workflows.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+            </div>
+            
+                <div id="sk-telecom" class="tab-pane fade">
+                <h4 class="subtitle">SK Telecom</h4>
+                    
+                        
+                            <p>SK Telecom (SKT), South Korea’s largest telecommunications operator, has been exploring optimized approaches for deploying OpenStack on Kubernetes with the aim of putting core business functions on containerized OpenStack by the end of 2018. SKT leverages Kolla and Openstack-Helm. with deployments automated by Kubespray. SKT devotes nearly 100% of it’s development efforts to OpenStack-Helm, and works closely with AT&T to make OpenStack-Helm successful.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>SKT has also incorporated other tools into their OpenStack on Kubernetes efforts. For logging, monitoring, and alarms, they are using <a href="https://prometheus.io">Prometheus</a> and <a href="https://www.elastic.co/">Elasticsearch</a>, <a href="https://fluentbit.io/">Fluent-bit</a>, and <a href="https://www.elastic.co/products/kibana">Kibana</a>, all of which are default reference tools in the OpenStack-Helm community. SKT combines all of these into a single closed-integrated solution called TACO: SKT All Container OpenStack.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                        
+                            <p class="text-center"><img class="medium-img" src="https://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-images-prod/containers2/sk-diagram.jpg" alt="SK Telecom"></p>
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>SKT specifically emphasizes an automated continuous integration/continuous delivery (CI/CD) pipeline around containerized Openstack on Kubernetes. SKT’s CI system consists of <a href="https://jenkins.io/">Jenkins</a>, <a href="https://docs.openstack.org/developer/rally/">Rally</a>, <a href="https://docs.openstack.org/tempest/latest/">Tempest</a>, Docker Registry, as well as Jira and Bitbucket. SKT also developed an open source tool called <a href="https://github.com/sktelecom-oslab/cookiemonster">Cookiemonster</a>, a chaos-monkey like resiliency test tool for Kubernetes deployment that performs resiliency tests for their CI pipeline.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>With every change, SKT automatically builds and tests both the OpenStack containers and Helm charts. Daily, they automatically install a highly available OpenStack deployment with three control nodes and two compute-nodes, run 400 test cases from Tempest against it to validate the services, and finally run resiliency testing with Cookiemonster and Rally. The complete CI system is illustrated in the following diagram:</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                        
+                            <p class="text-center"><img class="medium-img" src="https://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-images-prod/containers2/sk-diagram2.jpg" alt="SK Telecom"></p>
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>SKT automates its deployments with <a href="https://github.com/att-comdev/armada">Armada</a>, a sub-project of <a href="http://www.airshipit.org" target="_blank">Airship</a>, which was introduced in the community as a new open infrastructure project by AT&T. SKT is collaborating in community to provide enhancements to the project based on their production uses.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>In practical use, SKT has already seen a large number of benefits from deploying OpenStack on Kubernetes including:</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                            
+                                <ul>
+    
+        <li>
+            Simple and Easy Installations.
+            
+        </li>
+    
+        <li>
+            Cluster Auto-Healing.
+            
+        </li>
+    
+        <li>
+            An ability to upgrade and update OpenStack with minimal impact to running services.
+            
+        </li>
+    
+        <li>
+            Rapid adoption of advanced release methodologies, including blue-green deployment, canary releases.
+            
+        </li>
+    
+        <li>
+            Complete automated management of Python dependencies through container isolation.
+            
+        </li>
+    
+        <li>
+            Secure secret and configuration management.
+            
+        </li>
+    
+        <li>
+            Fast and flexible roll-outs of cluster updates.
+            
+        </li>
+    
+</ul>
+                            
+                            
+                        
+                    
+                        
+                            <p>SKT is still testing the approach, but is actively moving towards running their OpenStack-Helm deployments in production. By end of this year, SKT will have at least three production clusters, with the fourth and largest coming online in 2019. These use cases include:</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                            
+                                <ul>
+    
+        <li>
+            Big Data platform (planned to go live Q4 2018)
+            
+        </li>
+    
+        <li>
+            A virtual desktop infrastructure platform (production ready by Q4 2018)
+            
+        </li>
+    
+        <li>
+            A General purpose Internal Private Cloud (planned to go live Q3 2018)
+            
+        </li>
+    
+        <li>
+            A telco network infrastructure built on virtual network functions (planned to open sometime in 2019)
+            
+        </li>
+    
+</ul>
+                            
+                            
+                        
+                    
+                        
+                            <p>SKT is also trying to improve automation on telecom infrastructure operation by utilizing containerized VNFs and leveraging containers’ auto healing and fast scale-out features. In order to allow interaction between virtual machine based VNFs and containerized VNFs, <a href="https://wiki.onosproject.org/display/ONOS/SONA%3A+DC+Network+Virtualization">Simplified Overlay Network Architecture</a> (SONA), which is a virtual network solution for OpenStack, will support communication between VMs and containers. SONA uses the Kuryr project for integration of OpenStack and Kubernetes, and it optimizes network performance using software defined networking technologies.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>Overall, SKT is finding that Kubernetes helps solve many of the complexities of deploying and operating OpenStack. Simplifying OpenStack gives them a powerful approach to deliver advanced infrastructure innovation for the 5G era. Focusing efforts on Openstack on Kubernetes dramatically increased their internal capability to deal with the evolving shift toward microservices in containers and become a critical infrastructure for delivering Artificial Intelligence, Internet of Things, and Machine Learning.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+            </div>
+            
+                <div id="superfluidity" class="tab-pane fade">
+                <h4 class="subtitle">Superfluidity</h4>
+                    
+                        
+                            <p>The <a href="http://superfluidity.eu/" target="_blank">Superfluidity project</a> is made up of 18 partners from 12 European countries. It aims to enhance the ability to instantiate services on-the-fly, run them anywhere in the network (core, aggregation, edge) and shift them transparently to different locations. SUPERFLUIDITY is a European Research project (<a href="https://ec.europa.eu/programmes/horizon2020/" target="_blank">Horizon 2020</a>) trying to build the basic infrastructure blocks for 5G networks by leveraging and extending well known open source projects. SUPERFLUIDITY will provide a converged cloud-based 5G concept that will enable innovative use cases in the mobile edge, empower new business models, and reduce investment and operational costs.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>To pursue these goals, the project consortium is shifting away from legacy, VM-based applications to Cloud Native containerized applications. Kuryr serves as a bridge between OpenStack virtual machines, and Kubernetes and OpenShift containerized services.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>The project makes use of <a href="http://manageiq.org" target="_blank">ManageIQ</a> as a central networks function virtualization orchestrator (NFVO), Ansible for Application deployment and lifecycle management, OpenStack services including Heat, Neutron, and Octavia, and Kubernetes through <a href="https://www.openshift.com/" target="_blank">OpenShift</a> for VMs and containers integration.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                        
+                            <p class="text-center"><img class="medium-img" src="https://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-images-prod/containers2/super-table.jpg" alt="Superfluidity"></p>
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>By leveraging Ansible playbooks executed from the ManageIQ appliance, SUPERFLUIDITY offers a common way to deploy applications. These applications in turn use the cloud orchestration functionality provided by OpenStack Heat templates and OpenShift templates.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>The consortium deploys 5G cloud radio access networks (CRAN) and mobile edge computing (MEC) components within containers. It also deploys high throughput applications like video streaming on top of the distributed infrastructure.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>Shifting toward a cloud native approach to application delivery allows for rapid and resilient SUPERFLUIDITY installations. It enables a smooth transition from VM-based applications and components to containers, while retaining the versatility to enable VMs for some specific applications. Examples of these applications are special security protections or network acceleration required by single-route input/output virtualization (SRIOV).</p>
+                        
+                        
+                        
+                        
+                        
+                    
+                        
+                            <p>In scale performance testing, SUPERFLUIDITY was able to launch approximately 1000 pods at a rate of 22 pods/second (with time measured from creation to running). This remarkable performance was achieved by running OpenShift on VMs managed by OpenStack, with Kuryr acting as a pod network driver to avoid double-encapsulation performance hits.</p>
+                        
+                        
+                        
+                        
+                        
+                    
+            </div>
+            
+        </div>
+        <div class="studies">
+            <a class="btn btn-primary" href="#" id="case-studies-btn" data-section="iii-case-studies" title="Go to top">
+                <span>Select Another Case Study</span>
+                <i class="fa fa-caret-up"></i>
+            </a>
+        </div>
+    </div>
+</div><div class="row section regular" id="iv-conclusion">
+    <div class="col-lg-12">
+        <h3 class="text-center title">IV. Conclusion</h3>
+        
+        
+            
+                <p>Over the past few years, as containers have become an important tool for developers and organizations alike, OpenStack has leveraged its modular design and expansive community to integrate container technologies at many levels. This can be seen both by the various organizations bringing containers and OpenStack into production, and the number of projects that work alongside containers to deliver new capabilities. The OpenStack Foundation is committed to ensuring that emerging technologies can be incorporated and utilized within OpenStack, and containers are an important example of that commitment.</p>
+            
+            
+            
+            
+            
+        
+            
+                <p>To learn more, visit the <a href="https://www.openstack.org/containers/"> Containers Landing Page </a>, where you can find a copy of this document as well as links to dozens of videos focused on the integrations of OpenStack and containers. <a href="https://github.com/kubernetes/community/tree/master/sig-openstack">Kubernetes SIG-OpenStack</a> has a Slack channel, mailing list, and weekly meeting if you engage directly with the community that’s building Kubernetes and OpenStack integrations.</p>
+            
+            
+            
+            
+            
+        
+    </div>
+</div>
+<div class="row section index" id="v-open-source-project-index">
+    <div class="col-lg-12">
+        <h3 class="text-center title">V. Open Source Project Index</h3>
+        
+        <div id="accordion" class="panel-group">
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#airship" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Airship
+                        </a>
+                    </h4>
+                </div>
+                <div id="airship" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        Airship is a collection of interoperable and loosely coupled open source tools that provide automated cloud provisioning and management in a declarative way, based around Kubernetes as an application platform.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#ansible" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Ansible
+                        </a>
+                    </h4>
+                </div>
+                <div id="ansible" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        Ansible is a commonly used orchestration tool used to deploy and manage OpenStack installations.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#cinder" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Cinder
+                        </a>
+                    </h4>
+                </div>
+                <div id="cinder" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        OpenStack Cinder offers block storage as a service, providing a single API backed by over seventy different possible storage drivers.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#cloud-provider-openstack" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Cloud Provider OpenStack
+                        </a>
+                    </h4>
+                </div>
+                <div id="cloud-provider-openstack" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        Cloud Provider OpenStack is the implementation of the Kubernetes Cloud Provider interface. It allows an OpenStack-hosted Kubernetes cluster to directly access storage and load balancer resources in the OpenStack cloud.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#calico" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Calico
+                        </a>
+                    </h4>
+                </div>
+                <div id="calico" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        Calico is a network overlay with drivers for both Kubernetes and OpenStack that features L3-only routing.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#cyborg" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Cyborg
+                        </a>
+                    </h4>
+                </div>
+                <div id="cyborg" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        Cyborg is an OpenStack project that provides a general management framework for hardware accelerators including FPGA, GPU, ASIC, and others. Work is in progress to surface a general hardware interface to pods.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#docker" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Docker
+                        </a>
+                    </h4>
+                </div>
+                <div id="docker" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        Docker is an open source container virtualization framework, used to host containerized applications.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#helm" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Helm
+                        </a>
+                    </h4>
+                </div>
+                <div id="helm" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        Helm is the official package manager for Kubernetes. Application deployments are described by Helm-Charts, which can be automatically deployed and managed on a Kubernetes cluster.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#ironic" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Ironic
+                        </a>
+                    </h4>
+                </div>
+                <div id="ironic" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        Ironic is the OpenStack bare-metal service. Running either as a standalone service or as a driver to OpenStack Nova, it can manage the complete life-cycle of bare-metal systems, including enrollment, provisioning, maintenance, and decommissioning.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#loci" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Loci
+                        </a>
+                    </h4>
+                </div>
+                <div id="loci" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        LOCI is an OpenStack project to build lightweight, OCI compliant containers for OpenStack projects.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#lxc" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            LXC
+                        </a>
+                    </h4>
+                </div>
+                <div id="lxc" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        LXC is a low-level container virtualization interface that takes advantage of Linux kernel namespace isolation and other technologies to create isolated linux runtimes.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#kata-containers" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Kata Containers
+                        </a>
+                    </h4>
+                </div>
+                <div id="kata-containers" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        Kata Containers is a standard implementation of lightweight Virtual Machines (VMs) that feel and perform like containers, but provide the workload isolation and security advantages of VMs.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#keystone" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Keystone
+                        </a>
+                    </h4>
+                </div>
+                <div id="keystone" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        Keystone is the OpenStack Identity service that provides means for authenticating and managing user accounts and role information primarily for the OpenStack cloud environment, but also as a plugin to other environments, including Kubernetes.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#kolla-containers" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Kolla (Containers)
+                        </a>
+                    </h4>
+                </div>
+                <div id="kolla-containers" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        Kolla (Containers) is an OpenStack project to build containers for each OpenStack service. It includes a sophisticated build and templating systems, and is capable of building containers from both source and packages on a variety of host operating systems.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#kolla-ansible" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Kolla Ansible
+                        </a>
+                    </h4>
+                </div>
+                <div id="kolla-ansible" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        Kolla Ansible is an OpenStack project that uses Ansible to deploy and maintain a full OpenStack installation using Kolla containers.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#kubernetes" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Kubernetes
+                        </a>
+                    </h4>
+                </div>
+                <div id="kubernetes" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        Kubernetes is a container orchestration system that delivers robust and highly-available applications on top of cloud-infrastructure.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#kuryr" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Kuryr
+                        </a>
+                    </h4>
+                </div>
+                <div id="kuryr" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        Kuryr is an OpenStack project that provides a Neutron network overlay to container runtimes, including Docker and Kubernetes. It aims to be the “integration bridge” for container and VM networks.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#magnum" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Magnum
+                        </a>
+                    </h4>
+                </div>
+                <div id="magnum" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        Magnum is an OpenStack project that offers managed container platforms as a service, including Kubernetes, Docker Swarm, Mesos, and DC/OS platforms. It is capable of creating tenant isolated application platforms through a simple user-facing API.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#neutron" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Neutron
+                        </a>
+                    </h4>
+                </div>
+                <div id="neutron" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        Neutron is the OpenStack software-defined networking service, offering a single API to deliver dynamic network infrastructure backed by dozens of network drivers.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#openstack-ansible" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            OpenStack Ansible
+                        </a>
+                    </h4>
+                </div>
+                <div id="openstack-ansible" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        OpenStack Ansible is a project for building OpenStack services into LXC containers, and for deploying and managing OpenStack installations within those containerized services.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#openstack-helm" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            OpenStack Helm
+                        </a>
+                    </h4>
+                </div>
+                <div id="openstack-helm" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        OpenStack Helm is an OpenStack project that deploys and manages the lifecycle of OpenStack and supporting infrastructure on top of Kubernetes (eg Ceph and MariaDB) , delivering production ready deployments, for a range of use cases from small edge deployments to large central offices. Leveraging the Helm package management system. OpenStack Helm has support for both baremetal (Ironic) and virtual (Nova/KVM) workload management, and is image agnostic supporting both LOCI and Kolla containers.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#qinling" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Qinling
+                        </a>
+                    </h4>
+                </div>
+                <div id="qinling" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        Qinling is an OpenStack project to deliver Functions as a Service. Qinling supports different container orchestration platforms, such as Kubernetes and Docker Swarm, as well as different function package storage backends such as local file-store, OpenStack Swift, and S3.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#triple-o" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Triple-O
+                        </a>
+                    </h4>
+                </div>
+                <div id="triple-o" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        TripleO is a project aimed at installing, upgrading and operating OpenStack clouds using OpenStack’s cloud services as the foundation - building on Nova, Ironic, Neutron, Heat and Ansible to automate cloud management.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#zun" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                            Zun
+                        </a>
+                    </h4>
+                </div>
+                <div id="zun" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        
+                        Zun is the OpenStack Containers service. It aims to provide an API service for running application containers without the need to manage servers or clusters.
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div><div class="row section regular" id="vi-authors">
+    <div class="col-lg-12">
+        <h3 class="text-center title">VI. Authors</h3>
+        
+        
+            
+            
+            
+                <h4 class="subtitle">Members of the OpenStack SIG-Kubernetes Community</h4>
+            
+            
+            
+        
+            
+            
+            
+            
+            
+                
+                    <ul>
+    
+        <li>
+            Jaesuk Ahn, SK Telecom
+            
+        </li>
+    
+        <li>
+            Christian Berendt, Betacloud Solutions GmbH
+            
+        </li>
+    
+        <li>
+            Anne Bertucio, OpenStack Foundation
+            
+        </li>
+    
+        <li>
+            Pete Birley, AT&T
+            
+        </li>
+    
+        <li>
+            Chris Hoge, OpenStack Foundation
+            
+        </li>
+    
+        <li>
+            Lingxian Kong, Catalyst Cloud
+            
+        </li>
+    
+        <li>
+            Hongbin Lu, Huawei
+            
+        </li>
+    
+        <li>
+            Daniel Mellado, Red Hat, Inc.
+            
+        </li>
+    
+        <li>
+            Allison Price, OpenStack Foundation
+            
+        </li>
+    
+        <li>
+            David Rabel, B1 Systems GmbH
+            
+        </li>
+    
+        <li>
+            Sangho Shin, SK Telecom
+            
+        </li>
+    
+        <li>
+            Davanum Srinivas, Huawei
+            
+        </li>
+    
+        <li>
+            Luis Tomás, Red Hat, Inc.
+            
+        </li>
+    
+        <li>
+            Sam Yaple, Verizon Digital Media Services
+            
+        </li>
+    
+        <li>
+            Mikhail Fedosin, Red Hat, Inc.
+            
+        </li>
+    
+        <li>
+            Flavio Percoco, Red Hat, Inc.
+            
+        </li>
+    
+</ul>
+                
+                
+            
+        
+            
+            
+            
+                <h4 class="subtitle">Editor</h4>
+            
+            
+            
+        
+            
+            
+            
+            
+            
+                
+                    <ul>
+    
+        <li>
+            Brian E Whitaker, Zettabyte Content LLC
+            
+        </li>
+    
+</ul>
+                
+                
+            
+        
+    </div>
+</div>
+
+    </div>
+    <div class="scroll-top">
+        <button class="btn btn-default" id="btn-top" onclick="topFunction()">
+            <i class="fa fa-angle-up"></i>
+            <span> Top</span>
+        </button>
+    </div>
+</section>
+
+<div id="lightbox" class="modal">
+    <span class="close cursor" onclick="closeModal()">&times;</span>
+    <div class="modal-content">
+        <div class="mySlides">
+            <img src="" style="width:100%">
+        </div>
+    </div>
+</div>
+    <script type="text/javascript" src="https://www.openstack.org/node_modules/jquery/dist/jquery.min.js?m=1731693382"></script><script type="text/javascript" src="https://www.openstack.org/node_modules/jquery-migrate-legacy/dist/jquery-migrate.min.js?m=1731693382"></script><script type="text/javascript" src="https://www.openstack.org/node_modules/jquery-migrate/dist/jquery-migrate.min.js?m=1731693382"></script><script type="text/javascript" src="https://www.openstack.org/framework/thirdparty/jquery-entwine/dist/jquery.entwine-dist.js?m=1557447099"></script><script type="text/javascript" src="https://www.openstack.org/node_modules/bootstrap/dist/js/bootstrap.min.js?m=1731693380"></script><script type="text/javascript" src="https://www.openstack.org/node_modules/js-cookie/src/js.cookie.js?m=1731693382"></script><script type="text/javascript" src="https://www.openstack.org/themes/openstack/javascript/querystring.jquery.js?m=1790782113"></script><script type="text/javascript" src="https://www.openstack.org/themes/openstack/javascript/shadowbox/shadowbox.js?m=1790782113"></script><script type="text/javascript" src="https://www.openstack.org/themes/openstack/javascript/jquery.ticker.js?m=1790782113"></script><script type="text/javascript" src="https://www.openstack.org/themes/openstack/javascript/jquery.tools.min.js?m=1790782113"></script><script type="text/javascript" src="https://www.openstack.org/themes/openstack/javascript/jcarousellite.min.js?m=1790782113"></script><script type="text/javascript" src="https://www.openstack.org/themes/openstack/javascript/navigation.js?m=1790782113"></script><script type="text/javascript" src="https://www.openstack.org/themes/openstack/javascript/filetracking.jquery.js?m=1790782113"></script><script type="text/javascript" src="https://www.openstack.org/themes/openstack/javascript/updateProfileModal.js?m=1790782113"></script><script type="text/javascript" src="https://www.openstack.org/papers/javascript/paper-viewer-page.js?m=1790782112"></script><script type="text/javascript">//<![CDATA[
+jQuery(document).ready(function($) {
+
+    var d         = new Date();
+    var user_date = d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+    Cookies.set('user_date', user_date, { expires: 360, path: '/' });
+
+    $('body').filetracking();
+
+    $(document).on("click", ".outbound-link", function(event){
+        var href = $(this).attr('href');
+        recordOutboundLink(this,'Outbound Links',href);
+        event.preventDefault();
+        event.stopPropagation()
+        return false;
+    });
+
+    var use_shadow_box = false;
+    if(use_shadow_box)
+        Shadowbox.init();
+});
+
+//]]></script><script src="https://www.google.com/recaptcha/api.js" async defer></script>
+     <script>
+       function onSubmit(token) {
+         document.getElementById("e2ma_signup").submit();
+       }
+</script>
+<div class="footer-bottom">
+  <h3 style="color:#fff;">Subscribe to News About OpenStack</h3>
+  <p>Stay up to date on OpenStack and the Open Infrastructure community.</p>
+    <div class="container">
+        <div class="form-group">
+  <form method="post" id="e2ma_signup" onsubmit="return signupFormObj.checkForm(this)" action="https://app.e2ma.net/app2/audience/signup/1900249/1771360/">
+    <input id="id_prev_member_email" name="prev_member_email" type="hidden" />
+    <input id="id_source" name="source" type="hidden" />
+    <input id="id_group_4036448" name="group_4036448" type="hidden" value="4036448" />
+    <input type="hidden" name="private_set" value="{num_private}" />
+    <input placeholder="Email Address" id="id_email" name="email" type="email" required class="feedback-input" size="is-large" />
+    <a href="#" class="feedback-btn" onclick="document.getElementById('e2ma_signup').submit();" data-sitekey="6LeKvr0UAAAAAItxLgobGpatgngglauCXrZw2Yw4" data-callback='onSubmit'>
+      <span>SUBMIT</span>
+      <i class="fa fa-chevron-right"></i>
+    </a>
+  </form>
+</div>
+
+
+
+      
+    </div>
+</div>
+<footer>
+        <div class="container">
+        <div class="row footer-links">
+            <div class="col-lg-2 col-sm-2">
+                <h3>OpenStack</h3>
+                <ul>
+                    <li><a href="//openstack.org/software/project-navigator/">Projects</a></li>
+                    <li><a href="https://security.openstack.org" target="_blank">Security</a></li>
+                    <li><a href="//openstack.org/software/">Software</a></li>
+                    <li><a href="http://openstack.org/blog/">Blog</a></li>
+                    <li><a href="//openstack.org/news/">News</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-sm-2">
+                <h3>Community</h3>
+                <ul>
+                    <li><a href="https://www.meetup.com/pro/openinfradev">User Groups</a></li>
+                    <li><a href="//openstack.org/community/events/">Events</a></li>
+                    <li><a href="//openstack.org/community/jobs/">Jobs</a></li>
+                    <li><a href="//openstack.org/foundation/companies/">Companies</a></li>
+                    <li><a href="http://docs.openstack.org/infra/manual/developers.html">Contribute</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-sm-2">
+                <h3>Documentation</h3>
+                <ul>
+                    <li><a href="http://docs.openstack.org">OpenStack Manuals</a></li>
+                    <li><a href="//openstack.org/software/start/">Getting Started</a></li>
+                    <li><a href="http://developer.openstack.org">API Documentation</a></li>
+                    <li><a href="https://wiki.openstack.org">Wiki</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-sm-2">
+                <h3>Branding & Legal</h3>
+                <ul>
+                    <li><a href="//openstack.org/legal/">Legal Docs</a></li>
+                    <li><a href="//openstack.org/brand/">Logos & Guidelines</a></li>
+                    <li><a href="//openstack.org/brand/openstack-trademark-policy/">Trademark Policy</a></li>
+                    <li><a href="//openstack.org/privacy/">Privacy Policy</a></li>
+                    <li><a href="https://docs.openstack.org/contributors/common/setup-gerrit.html#individual-contributor-license-agreement">OpenStack CLA</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4 col-sm-4">
+                <h3>Stay In Touch</h3>
+                <a href="https://twitter.com/OpenStack" target="_blank">
+                    <img
+                            src="/themes/openstack/home_images/Icons/SVG/x-icon.svg"
+                            alt="x"
+                            style="width: 36px;position:relative;top:-10px;left:-5px"
+                    />
+                </a>
+                <a href="https://www.facebook.com/openinfradev/" target="_blank"><i class="fab fa-facebook-square" style="font-size: 36px;color:#eaeaea;padding-right:10px;"></i></a>
+                <a href="https://www.linkedin.com/groups/3239106/" target="_blank"><i class="fab fa-linkedin" style="font-size: 36px;color:#eaeaea;padding-right:10px;"></i></a>
+                <a href="https://www.youtube.com/user/OpenStackFoundation" target="_blank"><i class="fab fa-youtube-square" style="font-size: 36px;color:#eaeaea;padding-right:10px;"></i></a>
+                <a href="" data-toggle="modal" data-target="#wechat-modal"><i style="font-size: 36px;color:#eaeaea;padding-right:10px;" class="fab fa-weixin"></i></a>
+                <a href="https://bsky.app/profile/openstack.org" target="_blank"/>
+                    <img
+                        src="/themes/openstack/home_images/Icons/SVG/Bluesky_Logo.svg"
+                        alt="bluesky"
+                        style="width: 36px;position:relative;top:-10px;left:-5px"
+                    />
+                </a>
+                <a href="https://social.openinfra.dev/@OpenStack" rel="me" target="_blank"/>
+                <img
+                        src="/themes/openstack/home_images/Icons/SVG/mastodon.svg"
+                        alt="Mastodon"
+                        style="width: 36px;position:relative;top:-10px;left:-5px"
+                />
+                </a>
+                <!-- <form class="form-inline">
+                    <div class="form-group newsletter-form">
+                        <label>Join Our Newsletter</label>
+                        <input class="newsletter-input" type="input" placeholder="Email">
+                        <button type="submit" class="newsletter-btn">Join</button>
+                    </div>
+                </form> -->
+                <p class="fine-print">
+                    The OpenStack project is provided under the Apache 2.0 license. The project is supported by the <a href="https://openinfra.dev">OpenInfra Foundation</a>. openstack.org is powered by <a href="https://vexxhost.com" target="_blank">VEXXHOST</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="wechat-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <img width="150" src="https://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-assets-prod/summits/shanghai/qrcode-for-gh-5cc38c749efd-1280.jpg" />
+            </div>
+        </div>
+    </div>
+
+</footer>
+
+    <!-- Quantcast Tag -->
+<script type="text/javascript">
+var _qevents = _qevents || [];
+
+(function() {
+var elem = document.createElement('script');
+elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
+elem.async = true;
+elem.type = "text/javascript";
+var scpt = document.getElementsByTagName('script')[0];
+scpt.parentNode.insertBefore(elem, scpt);
+})();
+
+_qevents.push({
+qacct:"p-fM0cfazHHeyRH"
+});
+</script>
+
+<noscript>
+<div style="display:none;">
+<img src="//pixel.quantserve.com/pixel/p-fM0cfazHHeyRH.gif" border="0" height="1" width="1" alt="Quantcast"/>
+</div>
+</noscript>
+<!-- End Quantcast tag -->
+    <!-- Twitter universal website tag code -->
+<script>
+    !function(e,t,n,s,u,a){e.twq||(s=e.twq=function(){s.exe?s.exe.apply(s,arguments):s.queue.push(arguments);
+    },s.version='1.1',s.queue=[],u=t.createElement(n),u.async=!0,u.src='//static.ads-twitter.com/uwt.js',
+            a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(u,a))}(window,document,'script');
+    // Insert Twitter Pixel ID and Standard Event data below
+    twq('init','nxuu6');
+    twq('track','PageView');
+</script>
+<!-- End Twitter universal website tag code -->
+    <script src="//search.openstack.org/widget/embed.min.js"></script>
+</body>
+    <script type="text/javascript">
+    _linkedin_data_partner_id = "36268";
+</script><script type="text/javascript">
+    (function(){var s = document.getElementsByTagName("script")[0];
+        var b = document.createElement("script");
+        b.type = "text/javascript";b.async = true;
+        b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+        s.parentNode.insertBefore(b, s);})();
+</script>
+    <script>
+        var extraLanguages = ['ko_KR', 'de_DE', 'id_ID', 'ja_JP'];
+    </script>
+    <script type="text/javascript" src="https://www.openstack.org/papers/ui/production/js/paper-page.js"></script>
+    
+</html>

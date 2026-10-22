@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-title" content="Engineering at Meta - Engineering at Meta Blog">
+	<meta property="fb:app_id" content="1425766027653270" />
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+	<link rel="pingback" href="https://engineering.fb.com/xmlrpc.php">
+	<meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+
+	<!-- This site is optimized with the Yoast SEO Premium plugin v19.3 (Yoast SEO v27.3) - https://yoast.com/product/yoast-seo-premium-wordpress/ -->
+	<title>Scribe: Transporting petabytes per hour - Engineering at Meta</title>
+	<meta name="description" content="Scribe is a distributed, buffered queueing system that encapsulates all the complexity behind moving service logs from point A to point B." />
+	<link rel="canonical" href="https://engineering.fb.com/2019/10/07/core-infra/scribe/" />
+	<meta name="twitter:label1" content="Written by" />
+	<meta name="twitter:data1" content="Manolis Karpathiotakis, Dino Wernli, Milos Stojanovic, changigi649" />
+	<meta name="twitter:label2" content="Est. reading time" />
+	<meta name="twitter:data2" content="15 minutes" />
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https:\/\/schema.org","@graph":[{"@type":"Article","@id":"https:\/\/engineering.fb.com\/2019\/10\/07\/core-infra\/scribe\/#article","isPartOf":{"@id":"https:\/\/engineering.fb.com\/2019\/10\/07\/core-infra\/scribe\/"},"author":[{"@id":"https:\/\/engineering.fb.com\/#\/schema\/person\/image\/96a6f288032b567b7e514b2461e2126f"},{"@id":"https:\/\/engineering.fb.com\/#\/schema\/person\/image\/380bab7fcc0bca697d624ee3caa2988c"},{"@id":"https:\/\/engineering.fb.com\/#\/schema\/person\/image\/47d40e445a3ef44607327b9089423ebc"},{"@id":"https:\/\/engineering.fb.com\/#\/schema\/person\/7167c692371a46d5bb5879bbd971c6c0"}],"headline":"Scribe: Transporting petabytes per hour via a distributed, buffered queueing system","datePublished":"2019-10-07T15:00:46+00:00","dateModified":"2020-07-24T15:58:46+00:00","mainEntityOfPage":{"@id":"https:\/\/engineering.fb.com\/2019\/10\/07\/core-infra\/scribe\/"},"wordCount":2977,"publisher":{"@id":"https:\/\/engineering.fb.com\/#organization"},"image":{"@id":"https:\/\/engineering.fb.com\/2019\/10\/07\/core-infra\/scribe\/#primaryimage"},"thumbnailUrl":"https:\/\/engineering.fb.com\/wp-content\/uploads\/2019\/10\/CB19-046_Code_Blog_Scribe_Post_Hero-1.jpg","articleSection":["Core Infra","Data Infrastructure"],"inLanguage":"en-US"},{"@type":"WebPage","@id":"https:\/\/engineering.fb.com\/2019\/10\/07\/core-infra\/scribe\/","url":"https:\/\/engineering.fb.com\/2019\/10\/07\/core-infra\/scribe\/","name":"Scribe: Transporting petabytes per hour - Engineering at Meta","isPartOf":{"@id":"https:\/\/engineering.fb.com\/#website"},"primaryImageOfPage":{"@id":"https:\/\/engineering.fb.com\/2019\/10\/07\/core-infra\/scribe\/#primaryimage"},"image":{"@id":"https:\/\/engineering.fb.com\/2019\/10\/07\/core-infra\/scribe\/#primaryimage"},"thumbnailUrl":"https:\/\/engineering.fb.com\/wp-content\/uploads\/2019\/10\/CB19-046_Code_Blog_Scribe_Post_Hero-1.jpg","datePublished":"2019-10-07T15:00:46+00:00","dateModified":"2020-07-24T15:58:46+00:00","description":"Scribe is a distributed, buffered queueing system that encapsulates all the complexity behind moving service logs from point A to point B.","breadcrumb":{"@id":"https:\/\/engineering.fb.com\/2019\/10\/07\/core-infra\/scribe\/#breadcrumb"},"inLanguage":"en-US","potentialAction":[{"@type":"ReadAction","target":["https:\/\/engineering.fb.com\/2019\/10\/07\/core-infra\/scribe\/"]}]},{"@type":"ImageObject","inLanguage":"en-US","@id":"https:\/\/engineering.fb.com\/2019\/10\/07\/core-infra\/scribe\/#primaryimage","url":"https:\/\/engineering.fb.com\/wp-content\/uploads\/2019\/10\/CB19-046_Code_Blog_Scribe_Post_Hero-1.jpg","contentUrl":"https:\/\/engineering.fb.com\/wp-content\/uploads\/2019\/10\/CB19-046_Code_Blog_Scribe_Post_Hero-1.jpg","width":2001,"height":1126,"caption":"Scribe: Transporting petabytes per hour via a distributed, buffered queueing system"},{"@type":"BreadcrumbList","@id":"https:\/\/engineering.fb.com\/2019\/10\/07\/core-infra\/scribe\/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https:\/\/engineering.fb.com\/"},{"@type":"ListItem","position":2,"name":"Scribe: Transporting petabytes per hour via a distributed, buffered queueing system"}]},{"@type":"WebSite","@id":"https:\/\/engineering.fb.com\/#website","url":"https:\/\/engineering.fb.com\/","name":"Engineering at Meta","description":"Engineering at Meta Blog","publisher":{"@id":"https:\/\/engineering.fb.com\/#organization"},"potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https:\/\/engineering.fb.com\/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"en-US"},{"@type":"Organization","@id":"https:\/\/engineering.fb.com\/#organization","name":"Meta","url":"https:\/\/engineering.fb.com\/","logo":{"@type":"ImageObject","inLanguage":"en-US","@id":"https:\/\/engineering.fb.com\/#\/schema\/logo\/image\/","url":"https:\/\/engineering.fb.com\/wp-content\/uploads\/2023\/08\/Meta_lockup_positive-primary_RGB.jpg","contentUrl":"https:\/\/engineering.fb.com\/wp-content\/uploads\/2023\/08\/Meta_lockup_positive-primary_RGB.jpg","width":29011,"height":12501,"caption":"Meta"},"image":{"@id":"https:\/\/engineering.fb.com\/#\/schema\/logo\/image\/"},"sameAs":["https:\/\/www.facebook.com\/Engineering\/","https:\/\/x.com\/fb_engineering"]},[],{"@type":"Person","@id":"https:\/\/engineering.fb.com\/#\/schema\/person\/image\/96a6f288032b567b7e514b2461e2126f","name":"Manolis Karpathiotakis","image":{"@type":"ImageObject","inLanguage":"en-US","@id":"https:\/\/secure.gravatar.com\/avatar\/?s=96&d=mm&r=g23494c9101089ad44ae88ce9d2f56aac","url":"https:\/\/secure.gravatar.com\/avatar\/?s=96&d=mm&r=g","contentUrl":"https:\/\/secure.gravatar.com\/avatar\/?s=96&d=mm&r=g","caption":"Manolis Karpathiotakis"},"url":"https:\/\/engineering.fb.com\/author\/manolis-karpathiotakis\/"},{"@type":"Person","@id":"https:\/\/engineering.fb.com\/#\/schema\/person\/image\/380bab7fcc0bca697d624ee3caa2988c","name":"Dino Wernli","image":{"@type":"ImageObject","inLanguage":"en-US","@id":"https:\/\/secure.gravatar.com\/avatar\/?s=96&d=mm&r=g23494c9101089ad44ae88ce9d2f56aac","url":"https:\/\/secure.gravatar.com\/avatar\/?s=96&d=mm&r=g","contentUrl":"https:\/\/secure.gravatar.com\/avatar\/?s=96&d=mm&r=g","caption":"Dino Wernli"},"url":"https:\/\/engineering.fb.com\/author\/dino-wernli\/"},{"@type":"Person","@id":"https:\/\/engineering.fb.com\/#\/schema\/person\/image\/47d40e445a3ef44607327b9089423ebc","name":"Milos Stojanovic","image":{"@type":"ImageObject","inLanguage":"en-US","@id":"https:\/\/secure.gravatar.com\/avatar\/?s=96&d=mm&r=g23494c9101089ad44ae88ce9d2f56aac","url":"https:\/\/secure.gravatar.com\/avatar\/?s=96&d=mm&r=g","contentUrl":"https:\/\/secure.gravatar.com\/avatar\/?s=96&d=mm&r=g","caption":"Milos Stojanovic"},"url":"https:\/\/engineering.fb.com\/author\/milos-stojanovic\/"},{"@type":"Person","@id":"https:\/\/engineering.fb.com\/#\/schema\/person\/7167c692371a46d5bb5879bbd971c6c0","name":"changigi649","image":{"@type":"ImageObject","inLanguage":"en-US","@id":"https:\/\/secure.gravatar.com\/avatar\/a090692c0af9b5ed6f8071e0a05e3147f0ba61b52a51c0671d073d9adb4e198e?s=96&d=mm&r=g8fd1e2b34e75c09c4aea578e73cbde79","url":"https:\/\/secure.gravatar.com\/avatar\/a090692c0af9b5ed6f8071e0a05e3147f0ba61b52a51c0671d073d9adb4e198e?s=96&d=mm&r=g","contentUrl":"https:\/\/secure.gravatar.com\/avatar\/a090692c0af9b5ed6f8071e0a05e3147f0ba61b52a51c0671d073d9adb4e198e?s=96&d=mm&r=g","caption":"changigi649"},"url":"https:\/\/engineering.fb.com\/author\/changigi649\/"}]}</script>
+	<!-- / Yoast SEO Premium plugin. -->
+
+
+<link rel='dns-prefetch' href='//secure.gravatar.com' />
+<link rel='dns-prefetch' href='//v0.wordpress.com' />
+<link rel="alternate" type="application/rss+xml" title="Engineering at Meta &raquo; Feed" href="https://engineering.fb.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Engineering at Meta &raquo; Comments Feed" href="https://engineering.fb.com/comments/feed/" />
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://engineering.fb.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fengineering.fb.com%2F2019%2F10%2F07%2Fdata-infrastructure%2Fscribe%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://engineering.fb.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fengineering.fb.com%2F2019%2F10%2F07%2Fdata-infrastructure%2Fscribe%2F&#038;format=xml" />
+<style id="wp-img-auto-sizes-contain-inline-css">
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<style id="wp-emoji-styles-inline-css">
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<style id="wp-block-library-inline-css">
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}:root .has-text-align-center{text-align:center}:root .has-text-align-left{text-align:left}:root .has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{word-wrap:normal!important;border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-break:normal!important}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style^=border-color],[style*=";border-color"],[style*="; border-color"]){border-style:solid}html :where([style^=border-top-color],[style*=";border-top-color"],[style*="; border-top-color"]){border-top-style:solid}html :where([style^=border-right-color],[style*=";border-right-color"],[style*="; border-right-color"]){border-right-style:solid}html :where([style^=border-bottom-color],[style*=";border-bottom-color"],[style*="; border-bottom-color"]){border-bottom-style:solid}html :where([style^=border-left-color],[style*=";border-left-color"],[style*="; border-left-color"]){border-left-style:solid}html :where([style^=border-width],[style*=";border-width"],[style*="; border-width"]){border-style:solid}html :where([style^=border-top-width],[style*=";border-top-width"],[style*="; border-top-width"]){border-top-style:solid}html :where([style^=border-right-width],[style*=";border-right-width"],[style*="; border-right-width"]){border-right-style:solid}html :where([style^=border-bottom-width],[style*=";border-bottom-width"],[style*="; border-bottom-width"]){border-bottom-style:solid}html :where([style^=border-left-width],[style*=";border-left-width"],[style*="; border-left-width"]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+
+/*# sourceURL=/wp-includes/css/dist/block-library/common.min.css */
+</style>
+<style id="classic-theme-styles-inline-css">
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+/*# sourceURL=/wp-includes/css/classic-themes.min.css */
+</style>
+
+<style id="global-styles-inline-css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}.wp-block-button{--wp--preset--dimension--25: 25%;--wp--preset--dimension--50: 50%;--wp--preset--dimension--75: 75%;--wp--preset--dimension--100: 100%;}:where(body) { margin: 0; }:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}body{padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;}:root :where(.wp-element-button, .wp-block-button__link){background-color: #32373c;border-width: 0;color: #fff;font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;letter-spacing: inherit;line-height: inherit;padding-top: calc(0.667em + 2px);padding-right: calc(1.333em + 2px);padding-bottom: calc(0.667em + 2px);padding-left: calc(1.333em + 2px);text-decoration: none;text-transform: inherit;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+
+<link rel='stylesheet' id='all-css-12' href='https://engineering.fb.com/_static/??-eJyNjt0KwjAMRl/ILMyxqRfio0jXxi2uP8OkiG9vLQiKN14l+ZJzCN5XsCkqRUWdKZCgTY7gMpY4oGNRtFLCmb2DetEEjk3JNvjBrj5PHAUDqQFhpbJJC1ddrT9EyPCGrqSrsQu0Q9NhSC77wslsbuSMc4/acpz+Vpw5Whxz+RglWTYefJqSfA0v2Skc291h23f9fhieYaJgqQ==' type='text/css' media='all' />
+<script type="text/javascript" src="https://engineering.fb.com/_static/??-eJzTLy/QzcxLzilNSS3WzwKiwtLUokoopZebmaeXVayjj0+Rbm5melFiSSpUsX2uraG5paGxgamliUUWAK+RIic=" ></script><script type="text/javascript" src="https://engineering.fb.com/wp-content/themes/understrap/js/popper.min.js?m=1790870562g" ></script><script id="meta-site-cookies-js-before">
+window.MetaCookieAnalytics = {"measurementId":"G-0MPJMCK15K","previewBanner":false};
+//# sourceURL=meta-site-cookies-js-before
+</script>
+<script id="meta-site-cookies-js" src="https://engineering.fb.com/wp-content/plugins/meta-site-cookies/cookies.js?ver=1.8.4"></script>
+<link rel="https://api.w.org/" href="https://engineering.fb.com/wp-json/" /><link rel="alternate" title="JSON" type="application/json" href="https://engineering.fb.com/wp-json/wp/v2/posts/13563" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://engineering.fb.com/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress 7.1.3" />
+<link rel='shortlink' href='https://wp.me/sa0Lhq-scribe' />
+<link rel="preload" href="https://engineering.fb.com/wp-content/themes/code-fb-com/fonts/FacebookReader-Medium.woff2" as="font" type="font/woff2" crossorigin="anonymous"><link rel="preload" href="https://engineering.fb.com/wp-content/themes/code-fb-com/fonts/FacebookReader-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous"><link rel="preload" href="https://engineering.fb.com/wp-content/themes/code-fb-com/fonts/Optimistic_Display_W_Md.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Scribe: Transporting petabytes per hour via a distributed, buffered queueing system" />
+<meta property="og:url" content="https://engineering.fb.com/2019/10/07/data-infrastructure/scribe/" />
+<meta property="og:description" content="Our hardware infrastructure comprises millions of machines, all of which generate logs that we need to process, store, and serve. The total size of these logs is several petabytes every hour. The o…" />
+<meta property="article:published_time" content="2019-10-07T15:00:46+00:00" />
+<meta property="article:modified_time" content="2020-07-24T15:58:46+00:00" />
+<meta property="og:site_name" content="Engineering at Meta" />
+<meta property="og:image" content="https://engineering.fb.com/wp-content/uploads/2019/10/CB19-046_Code_Blog_Scribe_Post_Hero-1.jpg" />
+<meta property="og:image:width" content="2001" />
+<meta property="og:image:height" content="1126" />
+<meta property="og:image:alt" content="Scribe: Transporting petabytes per hour via a distributed, buffered queueing system" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:text:title" content="Scribe: Transporting petabytes per hour via a distributed, buffered queueing system" />
+<meta name="twitter:image" content="https://engineering.fb.com/wp-content/uploads/2019/10/CB19-046_Code_Blog_Scribe_Post_Hero-1.jpg?w=640" />
+<meta name="twitter:image:alt" content="Scribe: Transporting petabytes per hour via a distributed, buffered queueing system" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<!-- End Jetpack Open Graph Tags -->
+<style id="wp-custom-css">
+.table-of-contents {
+  position: sticky;
+  top: 20px;
+  background: #fff;
+  padding: 1em;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  max-width: 250px;
+}
+</style>
+
+	<link rel="shortcut icon" href="https://engineering.fb.com/wp-content/themes/code-fb-com/favicon.ico" />
+</head>
+
+<body class="wp-singular post-template-default single single-post postid-13563 single-format-standard wp-theme-understrap wp-child-theme-code-fb-com group-blog">
+
+<div class="hfeed site" id="page">
+
+<!-- ******************* The Navbar Area ******************* -->
+<div class="wrapper-fluid wrapper-navbar" id="wrapper-navbar">
+	<a class="skip-link screen-reader-text sr-only" href="#content">
+	Skip to content	</a>
+
+	<nav class="navbar navbar-expand-std">
+
+			<div class="nav-container">
+	
+
+				<!-- Your site title as branding in the menu -->
+
+	<div class="nav-top-row">
+	
+		<h1 class="navbar-brand mb-0">
+			<a rel="home" href="https://engineering.fb.com/" title="Engineering at Meta">
+				<img class="navbar-brand-logo" src="https://engineering.fb.com/wp-content/themes/code-fb-com/img/logo-meta.svg" class="navbar-brand-logo" alt="Engineering at Meta" width="215" height="40" loading="lazy">
+			</a>
+		</h1>
+
+	<!-- end custom logo -->
+				<label for="search" class="screen-reader-text">Search this site</label>
+				<input type="text" id="search" name="search" class="form-control-lg navbar-search" autocomplete="off">
+
+				<button class="navbar-toggler navbar-searchbar-toggler"
+						type="button"
+						data-toggle="collapse"
+						data-target="#searchbarDropdown"
+						aria-controls="searchbarDropdown"
+						aria-expanded="false"
+						aria-label="Toggle navigation">
+					<img src="https://engineering.fb.com/wp-content/themes/code-fb-com/img/icon-search.svg"  class="navbar-mobile-search-icon" loading="lazy" width="24" height="25" />
+				</button>
+
+				<!-- desktop language menu (mobile language menu is implemented via jQuery)-->
+				<div class="notranslate nice-select navbar-language form-control">
+				</div>
+
+				<button class="navbar-toggler collapsed navbar-menu-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+
+			</div>
+
+			<div class="navbar-border"></div>
+
+			<!-- The WordPress Menu goes here -->
+	<div id="navbarNavDropdown" class="collapse navbar-collapse"><ul id="main-menu" class="navbar-nav"><li id="menu-item-60" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children nav-item menu-item-60 dropdown"><a title="Open Source" href="#" data-toggle="dropdown" class="nav-link dropdown-toggle">Open Source <span class="caret"></span><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 129 129" enable-background="new 0 0 129 129" width="12px" height="15px">
+							<polyline points="40 50 80 90 120 50" stroke="#adb1b8" stroke-width="10" stroke-linecap="butt" fill="none" stroke-linejoin="miter"/>
+						  </svg></a>
+<ul class=" dropdown-menu" role="menu">
+	<li id="menu-item-12330" class="menu-item menu-item-type-taxonomy menu-item-object-category nav-item menu-item-12330"><a title="Open Source" href="https://engineering.fb.com/category/open-source/" class="nav-link">Open Source</a></li>
+	<li id="menu-item-12331" class="menu-item menu-item-type-custom menu-item-object-custom nav-item menu-item-12331"><a title="Meta Open Source" href="https://opensource.fb.com" class="nav-link">Meta Open Source</a></li>
+</ul>
+</li>
+<li id="menu-item-2686" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children nav-item menu-item-2686 dropdown"><a title="Platforms" href="#" data-toggle="dropdown" class="nav-link dropdown-toggle">Platforms <span class="caret"></span><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 129 129" enable-background="new 0 0 129 129" width="12px" height="15px">
+							<polyline points="40 50 80 90 120 50" stroke="#adb1b8" stroke-width="10" stroke-linecap="butt" fill="none" stroke-linejoin="miter"/>
+						  </svg></a>
+<ul class=" dropdown-menu" role="menu">
+	<li id="menu-item-65" class="menu-item menu-item-type-taxonomy menu-item-object-category nav-item menu-item-65"><a title="Android" href="https://engineering.fb.com/category/android/" class="nav-link">Android</a></li>
+	<li id="menu-item-66" class="menu-item menu-item-type-taxonomy menu-item-object-category nav-item menu-item-66"><a title="iOS" href="https://engineering.fb.com/category/ios/" class="nav-link">iOS</a></li>
+	<li id="menu-item-67" class="menu-item menu-item-type-taxonomy menu-item-object-category nav-item menu-item-67"><a title="Web" href="https://engineering.fb.com/category/web/" class="nav-link">Web</a></li>
+</ul>
+</li>
+<li id="menu-item-2682" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children nav-item menu-item-2682 dropdown"><a title="Infrastructure Systems" href="#" data-toggle="dropdown" class="nav-link dropdown-toggle">Infrastructure Systems <span class="caret"></span><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 129 129" enable-background="new 0 0 129 129" width="12px" height="15px">
+							<polyline points="40 50 80 90 120 50" stroke="#adb1b8" stroke-width="10" stroke-linecap="butt" fill="none" stroke-linejoin="miter"/>
+						  </svg></a>
+<ul class=" dropdown-menu" role="menu">
+	<li id="menu-item-218" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent nav-item menu-item-218"><a title="Core Infra" href="https://engineering.fb.com/category/core-infra/" class="nav-link">Core Infra</a></li>
+	<li id="menu-item-219" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent nav-item menu-item-219"><a title="Data Infrastructure" href="https://engineering.fb.com/category/data-infrastructure/" class="nav-link">Data Infrastructure</a></li>
+	<li id="menu-item-220" class="menu-item menu-item-type-taxonomy menu-item-object-category nav-item menu-item-220"><a title="DevInfra" href="https://engineering.fb.com/category/developer-tools/" class="nav-link">DevInfra</a></li>
+	<li id="menu-item-226" class="menu-item menu-item-type-taxonomy menu-item-object-category nav-item menu-item-226"><a title="Production Engineering" href="https://engineering.fb.com/category/production-engineering/" class="nav-link">Production Engineering</a></li>
+	<li id="menu-item-227" class="menu-item menu-item-type-taxonomy menu-item-object-category nav-item menu-item-227"><a title="Security &amp; Privacy" href="https://engineering.fb.com/category/security/" class="nav-link">Security &amp; Privacy</a></li>
+	<li id="menu-item-18607" class="menu-item menu-item-type-custom menu-item-object-custom nav-item menu-item-18607"><a title="Research Publications" href="https://research.facebook.com/publications/research-areas/systems-infrastructure/" class="nav-link">Research Publications</a></li>
+</ul>
+</li>
+<li id="menu-item-2683" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children nav-item menu-item-2683 dropdown"><a title="Physical Infrastructure" href="#" data-toggle="dropdown" class="nav-link dropdown-toggle">Physical Infrastructure <span class="caret"></span><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 129 129" enable-background="new 0 0 129 129" width="12px" height="15px">
+							<polyline points="40 50 80 90 120 50" stroke="#adb1b8" stroke-width="10" stroke-linecap="butt" fill="none" stroke-linejoin="miter"/>
+						  </svg></a>
+<ul class=" dropdown-menu" role="menu">
+	<li id="menu-item-215" class="menu-item menu-item-type-taxonomy menu-item-object-category nav-item menu-item-215"><a title="Connectivity" href="https://engineering.fb.com/category/connectivity/" class="nav-link">Connectivity</a></li>
+	<li id="menu-item-216" class="menu-item menu-item-type-taxonomy menu-item-object-category nav-item menu-item-216"><a title="Data Center Engineering" href="https://engineering.fb.com/category/data-center-engineering/" class="nav-link">Data Center Engineering</a></li>
+	<li id="menu-item-217" class="menu-item menu-item-type-taxonomy menu-item-object-category nav-item menu-item-217"><a title="Networking &amp; Traffic" href="https://engineering.fb.com/category/networking-traffic/" class="nav-link">Networking &amp; Traffic</a></li>
+	<li id="menu-item-18608" class="menu-item menu-item-type-custom menu-item-object-custom nav-item menu-item-18608"><a title="Research Publications" href="https://research.facebook.com/publications/research-areas/networking-connectivity/" class="nav-link">Research Publications</a></li>
+</ul>
+</li>
+<li id="menu-item-2684" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children nav-item menu-item-2684 dropdown"><a title="Video Engineering &amp; AR/VR" href="#" data-toggle="dropdown" class="nav-link dropdown-toggle">Video Engineering &amp; AR/VR <span class="caret"></span><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 129 129" enable-background="new 0 0 129 129" width="12px" height="15px">
+							<polyline points="40 50 80 90 120 50" stroke="#adb1b8" stroke-width="10" stroke-linecap="butt" fill="none" stroke-linejoin="miter"/>
+						  </svg></a>
+<ul class=" dropdown-menu" role="menu">
+	<li id="menu-item-225" class="menu-item menu-item-type-taxonomy menu-item-object-category nav-item menu-item-225"><a title="Video Engineering" href="https://engineering.fb.com/category/video-engineering/" class="nav-link">Video Engineering</a></li>
+	<li id="menu-item-223" class="menu-item menu-item-type-taxonomy menu-item-object-category nav-item menu-item-223"><a title="Virtual Reality" href="https://engineering.fb.com/category/virtual-reality/" class="nav-link">Virtual Reality</a></li>
+	<li id="menu-item-13388" class="menu-item menu-item-type-custom menu-item-object-custom nav-item menu-item-13388"><a title="Research Publications" href="https://research.facebook.com/publications/research-areas/augmented-reality-virtual-reality/" class="nav-link">Research Publications</a></li>
+</ul>
+</li>
+<li id="menu-item-2685" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children nav-item menu-item-2685 dropdown"><a title="Artificial Intelligence" href="#" data-toggle="dropdown" class="nav-link dropdown-toggle">Artificial Intelligence <span class="caret"></span><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 129 129" enable-background="new 0 0 129 129" width="12px" height="15px">
+							<polyline points="40 50 80 90 120 50" stroke="#adb1b8" stroke-width="10" stroke-linecap="butt" fill="none" stroke-linejoin="miter"/>
+						  </svg></a>
+<ul class=" dropdown-menu" role="menu">
+	<li id="menu-item-222" class="menu-item menu-item-type-taxonomy menu-item-object-category nav-item menu-item-222"><a title="ML Applications" href="https://engineering.fb.com/category/ml-applications/" class="nav-link">ML Applications</a></li>
+	<li id="menu-item-221" class="menu-item menu-item-type-taxonomy menu-item-object-category nav-item menu-item-221"><a title="AI Research" href="https://engineering.fb.com/category/ai-research/" class="nav-link">AI Research</a></li>
+	<li id="menu-item-13387" class="menu-item menu-item-type-custom menu-item-object-custom nav-item menu-item-13387"><a title="Research Publications" href="https://ai.facebook.com/results/?content_types%5B0%5D=publication" class="nav-link">Research Publications</a></li>
+</ul>
+</li>
+<li id="menu-item-228" class="menu-item menu-item-type-custom menu-item-object-custom nav-item menu-item-228"><a title="Watch Videos" href="/videos" class="nav-link">Watch Videos</a></li>
+</ul></div>		</div><!-- .container -->
+	
+		<div class="search-container collapse" id="searchbarDropdown">
+			<div class="searchbar-search">
+				<div class="searchbar-container">
+
+					<div class="navbar-mobile-search-margin"></div>
+					<input type="text" name="search" placeholder="Search" class="form-control-lg navbar-mobile-search" autofocus autocomplete="off">
+					<button class="searchbar-clear">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</nav><!-- .site-navigation -->
+
+</div><!-- .wrapper-navbar end -->
+
+<div class="wrapper" id="single-wrapper">
+
+	<div class="single-container row" id="content" tabindex="-1">
+
+		<!-- Do the left sidebar check. -->
+		
+
+
+<div class="content-area" id="primary">
+		<main class="site-main" id="main">
+
+			
+				
+<article class="post-13563 post type-post status-publish format-standard has-post-thumbnail hentry category-core-infra category-data-infrastructure fb_content_type-article" id="post-13563">
+
+	<header class="entry-header">
+		<div class="entry-meta">
+			POSTED ON <span class="posted-on entry-date"><time class="published updated" datetime="2019-10-07">OCTOBER 7, 2019</time></span> TO <span class="cat-links"><a href="https://engineering.fb.com/category/core-infra/" rel="category tag">Core Infra</a>, <a href="https://engineering.fb.com/category/data-infrastructure/" rel="category tag">Data Infrastructure</a></span>
+			<h1 class="entry-title"><div>Scribe: Transporting petabytes per hour via a distributed, buffered queueing system</div></h1>		</div><!-- .entry-meta -->
+
+	</header><!-- .entry-header -->
+
+			<figure id="post-feat-image-container">
+				<img width="2001" height="1126" src="https://engineering.fb.com/wp-content/uploads/2019/10/CB19-046_Code_Blog_Scribe_Post_Hero-1.jpg" class="wp-post-image" alt="Scribe: Transporting petabytes per hour via a distributed, buffered queueing system" title="CB19-046_Code_Blog_Scribe_Post_Hero (1)" />						</figure>
+		
+	<div class="entry-authors-social">
+					<div class="entry-authors">
+				By <a href="https://engineering.fb.com/author/manolis-karpathiotakis/" title="Posts by Manolis Karpathiotakis" class="author url fn" rel="author">Manolis Karpathiotakis</a>, <a href="https://engineering.fb.com/author/dino-wernli/" title="Posts by Dino Wernli" class="author url fn" rel="author">Dino Wernli</a>, <a href="https://engineering.fb.com/author/milos-stojanovic/" title="Posts by Milos Stojanovic" class="author url fn" rel="author">Milos Stojanovic</a>			</div>
+			</div>
+
+	
+	<div class="entry-content">
+
+		<p>Our hardware infrastructure comprises millions of machines, all of which generate logs that we need to process, store, and serve. The total size of these logs is several petabytes every hour. The outputs are generally processed somewhere other than where they were generated: They can be relevant to a variety of downstream processing pipelines and may each need to be accessed at different times. The task of collecting, aggregating, and delivering this volume of logs (with low latency and high throughput) requires a systematic approach. Our solution is Scribe, a distributed queueing system that encapsulates all the complexity behind moving service logs from point A to point B.</p>
+<p><span style="font-weight: 400;">Scribe processes logs with an input rate that can exceed 2.5 terabytes per second and an output rate that can exceed 7 terabytes per second. To put this workload into perspective, the output of the Large Hadron Collider at CERN during its latest run was estimated to reach only </span><a href="https://home.cern/science/computing/processing-what-record"><span style="font-weight: 400;">25 gigabytes per second</span></a><span style="font-weight: 400;">. Scribe has recently undergone a major architectural revamp and simplification, and its new architecture is currently in production. We are sharing for the first time Scribe’s current design, as well as the factors that led to this current architecture and how our scale and evolution have influenced it over the past decade. </span></p>
+<h2><span style="font-weight: 400;">Scribe: A general-purpose, buffered queueing system</span></h2>
+<p><span style="font-weight: 400;">Our ecosystem involves a diverse range of log generation scenarios. A typical example is that of web servers generating semi-structured logs indicating their health. In the most general case, developers want to transport the unstructured contents of a static file to a downstream system. That downstream system is generally one of our analysis tools. The typical expectation is that a developer should be able to perform analysis and exploration over a collection of logs. Depending on the use case, they might want to observe real-time trends or historical patterns. </span><span style="font-weight: 400;">Logs are thus sent to the data warehouse for historical analysis, or to real-time stream processing systems, such as </span><a href="https://research.fb.com/publications/realtime-data-processing-at-facebook/"><span style="font-weight: 400;">Puma</span><span style="font-weight: 400;">, </span><span style="font-weight: 400;">Stylus</span></a><span style="font-weight: 400;">, and </span><a href="https://research.fb.com/publications/scuba-diving-into-data-at-facebook/"><span style="font-weight: 400;">Scuba</span></a><span style="font-weight: 400;">, for real-time exploration.</span></p>
+<h3><span style="font-weight: 400;">Transporting a log</span></h3>
+<p><span style="font-weight: 400;">Scribe allows its users to write a payload to a named logical stream (called a category) from any of our machines. The payloads can vary widely in size, structure, and format, yet Scribe treats them in the same way. Each log is stored durably for a configurable retention period — typically a few days. During this period, consumers can read the stream of logs sequentially, an operation referred to as tailing.</span></p>
+<figure id="attachment_13571" aria-describedby="caption-attachment-13571" style="width: 2000px" class="wp-caption alignnone"><img decoding="async" class="wp-image-13571 size-full" src="https://engineering.fb.com/wp-content/uploads/2019/10/Scribe_chart.jpg" alt="A high-level view of Scribe’s current architecture" width="2000" height="816" srcset="https://engineering.fb.com/wp-content/uploads/2019/10/Scribe_chart.jpg 2000w, https://engineering.fb.com/wp-content/uploads/2019/10/Scribe_chart.jpg?resize=916,374 916w, https://engineering.fb.com/wp-content/uploads/2019/10/Scribe_chart.jpg?resize=768,313 768w, https://engineering.fb.com/wp-content/uploads/2019/10/Scribe_chart.jpg?resize=1024,418 1024w, https://engineering.fb.com/wp-content/uploads/2019/10/Scribe_chart.jpg?resize=1536,627 1536w, https://engineering.fb.com/wp-content/uploads/2019/10/Scribe_chart.jpg?resize=96,39 96w, https://engineering.fb.com/wp-content/uploads/2019/10/Scribe_chart.jpg?resize=192,78 192w" sizes="(max-width: 992px) 100vw, 62vw" /><figcaption id="caption-attachment-13571" class="wp-caption-text">A high-level view of Scribe’s current architecture.</figcaption></figure>
+<p><span style="font-weight: 400;">Any process can use a Producer library to write a log to Scribe. The Producer could belong to applications running in containers, such as one of the web servers executing </span><a href="https://hacklang.org/"><span style="font-weight: 400;">Hack</span></a><span style="font-weight: 400;"> code (a dialect of PHP). An engineer using Scribe can instruct the Producer to take one of the following paths:</span></p>
+<ul>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Write to a local daemon</span> <span style="font-weight: 400;">(Scribed) in charge of eventually sending the log to storage back-ends</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Write to a remote tier of back-end servers (Write Service) directly</span></li>
+</ul>
+<p><span style="font-weight: 400;">Finally, consumers can read logs in streaming fashion by contacting a Read Service. </span></p>
+<p><a href="https://www.usenix.org/conference/lisa18/presentation/braunschweig"><span style="font-weight: 400;">Scribe’s first incarnation</span></a><span style="font-weight: 400;"> was really an early version of Scribed — essentially a NetApp filer — that was responsible for persisting logs to network-attached storage drives. Although Scribe has been an always-available system without experiencing any downtime, its architecture has evolved over time into a more sophisticated one and now comprises more than 40 distinct components. The growing number of complex components made it difficult to retain an open source version stripped of our internal specifications. This complexity is the main reason that we archived the </span><a href="https://github.com/facebookarchive/scribe"><span style="font-weight: 400;">open source Scribe project</span></a><span style="font-weight: 400;">. The current version of Scribe’s architecture is detailed below, with a focus on the components that comprise the data plane. </span></p>
+<h3><span style="font-weight: 400;">Scribed</span></h3>
+<p><span style="font-weight: 400;">Most of our machines run a daemon process called Scribed. Customers can directly write logs to Scribed if their primary concern is to offload ownership of logs as quickly as possible. Scribed uses local disk (in addition to memory) as a buffer for situations in which the machine has lost connectivity or back-ends are otherwise unavailable. Writing logs directly to Scribed works well for the majority of Scribe users. But communication with Scribed can have some drawbacks:</span></p>
+<ul>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Storing logs on disk can have latency and consistency implications.</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">If Scribed is unavailable on a single machine, writes can get lost or blocked for a non-trivial amount of time.</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 400;">Scribed is a shared resource on the machine and users that attempt to write great amounts of logs can monopolize Scribed resources, which affects the experience of other users on the same machine.</span></li>
+</ul>
+<p><span style="font-weight: 400;">To solve the rare cases in which users experience these drawbacks, we built the ability for users to bypass Scribed and instead instruct their Producer to write logs directly to the Scribe Write Service. Doing so can decrease the end-to-end latency and increase write availability, because the Producer can direct the write operation to multiple back-end hosts rather than to a single local process. On the other hand, write resilience can decrease: For example, if a Producer is unable to offload logs to the Write Service quickly enough, then the Producer’s in-memory queue can fill up, resulting in denial of the excess write requests and message loss. </span></p>
+<h3><span style="font-weight: 400;">Write Service</span></h3>
+<p><span style="font-weight: 400;">Eventually, every log makes it to one of Scribe’s back-end servers. Scribe delegates the choice of a server to an internal load-balancing service, based on locality and availability. The choice is dynamic, and the fleet of back-end servers acts as a single, resilient Write Service, without a single point of failure. Since Scribe collects logs from millions of machines, logs from different machines can arrive at the Write Service in any order. In addition, logs from a single machine can arrive at several different Write Service machines and eventually be stored at several different storage back-end instances. These back-ends do not share a notion of global time or causality, and therefore Scribe makes no attempt to preserve the relative order of the logs it receives. </span></p>
+<p><span style="font-weight: 400;">Instead, the Write Service focuses on batching incoming logs by category and forwarding the batches to storage back-ends. Storage is organized in clusters:</span> <span style="font-weight: 400;">Each storage cluster is a set of machines that host Scribe’s storage components. The Write Service selects which storage cluster to place each log batch in. </span><span style="font-weight: 400;">The aim of the Write Service is to place related logs (e.g., the same category) in a subset of clusters, which strikes a balance between being large enough to ensure write availability and small enough to ensure read availability. Additionally, placement decisions take other factors into consideration, such as which geographic region we expect the logs to be read from.</span><span style="font-weight: 400;"> </span></p>
+<p><span style="font-weight: 400;">Once the storage cluster has been selected, the Write Service forwards the log. Up until the point that a log reaches durable storage in a cluster, the log has generally been residing in the memory of a process and has thus been susceptible to a number of failure scenarios that can lead to its loss; tolerating a minimal amount of loss was one of the design choices we made in order to avoid overheads that would affect its high-throughput, low-latency offering. Users that require even more rigid delivery guarantees can opt for a configuration of Scribe that trades performance for further reduced loss. </span></p>
+<h3><span style="font-weight: 400;">Buffered storage in LogDevice</span></h3>
+<p><span style="font-weight: 400;">The storage back-end of Scribe is </span><a href="https://engineering.fb.com/core-data/logdevice-a-distributed-data-store-for-logs/"><span style="font-weight: 400;">LogDevice</span></a><span style="font-weight: 400;">, a distributed store for logs, which offers high durability and availability under a variety of workloads and failure scenarios. Scribe stores each log as a LogDevice record. By relying on LogDevice for durable storage, Scribe can operate as if there were a single (logical) copy for each record: The LogDevice layer hides the complexity of operations such as record replication and recovery.</span></p>
+<p><span style="font-weight: 400;">LogDevice organizes records into sequences called partitions. A Scribe category is backed by multiple partitions spread across multiple LogDevice clusters. Once LogDevice persistently stores a record in a partition, the record becomes available for reading. Again, note that Scribe retains records in LogDevice for a limited amount of time — typically a few days. Scribe aims to buffer records for a period of time that is sufficient for customers to consume it or replay records from it in case of failures. Customers that require retention for longer than a few days typically push their logs to long-term storage.</span></p>
+<p><span style="font-weight: 400;">Scribe had been relying on </span><a href="https://hadoop.apache.org"><span style="font-weight: 400;">HDFS</span></a><span style="font-weight: 400;"> for its storage back-end before migrating to LogDevice. Scribe eventually reached the scalability limits of HDFS — around the same time that Facebook was deprecating its use of HDFS. The transition to a LogDevice-based back-end brought Scribe to its current form and allowed it to efficiently serve additional use cases.</span></p>
+<h3><span style="font-weight: 400;">Reading a log</span></h3>
+<p><span style="font-weight: 400;">Customers can read logs written to Scribe by contacting a Read Service, which provides read access to streams of logs. The implementation of the Read Service is based on streaming </span><a href="https://code.fb.com/open-source/under-the-hood-building-and-open-sourcing-fbthrift/"><span style="font-weight: 400;">Thrift</span></a><span style="font-weight: 400;"> and follows the </span><a href="https://www.reactive-streams.org/"><span style="font-weight: 400;">reactive streams specification</span></a><span style="font-weight: 400;">. In addition to generic access to log streams, the Read Service also acts as a load-balancing layer, allowing Scribe to serve multitenant read use cases while sharing resources (e.g., connections to storage back-ends).</span></p>
+<p><span style="font-weight: 400;">Reading logs from Scribe via the Read Service involves identifying the clusters that contain logs for the requested category and reading the corresponding LogDevice partitions. The contents from each partition are merged together and partially ordered by storage timestamp. Given that a consumer is reading logs from multiple clusters and that logs generated in a single client host can end up in multiple Scribe clusters, the consumer avoids enforcing a strict output order. Instead, the consumer applies “rough” ordering, ensuring that output logs are within N minutes of one another (where N is typically 30) in terms of the time when the logs reached persistent storage; customers that require logs to be flushed in the precise order of their creation typically use a stream processing system such as </span><a href="https://research.fb.com/publications/realtime-data-processing-at-facebook/"><span style="font-weight: 400;">Stylus</span></a><span style="font-weight: 400;"> to read logs from Scribe and order them further.</span></p>
+<h2><span style="font-weight: 400;">Design decisions</span></h2>
+<p><span style="font-weight: 400;">Scribe exposes itself as a Thrift service that runs on a host machine and collects logs streamed in real time from clients. Given its intended ubiquity, it has been designed based on a number of first-class requirements. Specifically, the Scribe service must be:</span></p>
+<ol>
+<li style="font-weight: 400;"><b>Simple,</b><span style="font-weight: 400;"> exposing a straightforward API for customers to write and read logs.</span></li>
+<li style="font-weight: 400;"><b>(Write) Available,</b><span style="font-weight: 400;"> tolerating failures at any part of the transport process, while acknowledging that small amounts of logs may get lost in the process.</span></li>
+<li style="font-weight: 400;"><b>Scalable,</b><span style="font-weight: 400;"> handling millions of producers, whose aggregate input rate can exceed 2.5 terabytes per second, and hundreds of thousands of consumers, whose aggregate output rate can exceed 7 terabytes per second.</span></li>
+<li style="font-weight: 400;"><b>Multitenant, </b><span style="font-weight: 400;">ensuring that customers can multiplex over the shared Scribe medium without each customer affecting the service quality of others.</span></li>
+</ol>
+<h3><span style="font-weight: 400;">Simplicity</span></h3>
+<p><span style="font-weight: 400;">Scribe exposes a high-level API for users to write or read logs — a Producer and a Consumer API, respectively. </span><span style="font-weight: 400;">The Producer API has bindings for multiple programming languages and consists of a single write method. The Consumer API exposes a consumer object, which can be used to read streams of logs from Scribe as well as to perform additional operations, such as obtaining checkpoints.</span></p>
+<p><span style="font-weight: 400;">Besides the high-level APIs, Scribe offers convenience binaries that are available in our hosts. Customers that want to write logs in Scribe </span><span style="font-weight: 400;">can use a command such as the following:<br />
+</span></p>
+<pre class="line-numbers"><code class="language-shell"># scribe_cat $CATEGORY $PAYLOAD</code></pre>
+<p><span style="font-weight: 400;">Regarding reading logs from Scribe, customers can use the following command to dynamically create a read stream to tail a category’s log for a given time period:</span></p>
+<pre class="line-numbers"><code class="language-shell"># ptail --since $ts1 --till $ts2 $CATEGORY | consumerApp
+</code></pre>
+<p>&nbsp;</p>
+<h3><span style="font-weight: 400;">Availability</span></h3>
+<p><span style="font-weight: 400;">The main concern of Scribe is ensuring that logs written to it manage to reach the persistent LogDevice storage, despite the presence of multiple failure types. Starting from the “edge” of Scribe, Producer instances buffer logs in memory to handle brief periods of Scribed unavailability (e.g., Scribed restarts for update purposes). In similar fashion, Scribed buffers logs on a local disk to handle periods of network outages that prevent it from successfully sending logs to the Write Service. LogDevice further reinforces write availability by persisting multiple copies of each log record it receives. The combination of these features enables Scribe to successfully serve the vast majority of write calls.</span></p>
+<p><span style="font-weight: 400;">The read path of Scribe is designed to efficiently serve logs in the context of straggling storage hosts, racks, and clusters. Specifically, given the high fan-in of storage clusters in which Scribe logs end up, a read stream typically fetches logs from multiple clusters that are spread across the world. With logs spread across multiple clusters, Scribe needs to be able to handle the case where a cluster is unable to serve readers fast enough or at all.</span></p>
+<p><span style="font-weight: 400;">Scribe handles situations of temporary cluster unavailability by allowing users to relax the delivery and ordering guarantees of output logs. In practice, this means readers can choose whether they want to wait for unavailable logs or proceed without it.</span></p>
+<h3><span style="font-weight: 400;">Scalability</span></h3>
+<p><span style="font-weight: 400;">Scribe has to accommodate ever-growing amounts of logs written to it. At the same time, the writing patterns can vary significantly, even within a single day. The physical storage of a Scribe category is spread across multiple LogDevice partitions, each of which can sustain a maximum write throughput. Scribe dynamically scales the number of partitions for a category depending on the volume that the partitions have been receiving. The end result of this partition provisioning process is the automatic handling of changes in write traffic, which allows Scribe throughput to elastically scale horizontally.</span><span style="font-weight: 400;"> </span></p>
+<p><span style="font-weight: 400;">Regarding log reads, it can be nontrivial for a single consumer process to process and flush the huge volume of logs generated for a given category: The network card of the consumer host might become saturated, or the process consuming the consumer’s output might be unable to process logs at the speed it is generated due to CPU limitations. Scribe thus has introduced </span><span style="font-weight: 400;">buckets</span><span style="font-weight: 400;"> — a feature that enables multiple independent consumer processes to collectively consume the logs from a single Scribe category. Buckets are a sharding/indexing mechanism: They enable users to specify the number of streams in which they want Scribe to shard the inputs, and allow users to retrieve a specific shard via a given consumer. The Producer can explicitly provide a bucket number or leave it unspecified to have logs randomly distributed among available buckets.</span></p>
+<h3><span style="font-weight: 400;">Multitenancy</span></h3>
+<p><span style="font-weight: 400;">Scribe’s users treat it as a Facebook-scale service: At any given point, millions of Producers write logs to hundreds of thousands of Scribe categories; hundreds of thousands of consumers then consume these logs. Still, customers expect their experience to remain unaffected by the other customers of the Scribe service. Scribe thus continuously monitors usage patterns in order to detect unexpected user behavior that could compromise the overall health of the system.</span></p>
+<p><span style="font-weight: 400;">Scribe enforces rate limits on write operations in order to protect its back-ends. Specifically, Scribe associates a write quota with each category: Quota excesses can then result in Scribe block</span></p>
+<p><span style="font-weight: 400;">listing a category (i.e., drop its newly incoming traffic), accepting a fraction of its logs, or applying backpressure to the Producers. In addition, Scribe detects cases in which customers read the contents of a category multiple times and, as a result, place increased stress on Scribe and its storage backend and increase the usage of cross-region bandwidth — a resource that is consumed aggressively due to the &#8220;write-anywhere&#8221; nature of Scribe.</span></p>
+<p><span style="font-weight: 400;">Besides controlling demand, Scribe attempts to minimize the interactions with the Scribe service that could potentially require manual intervention. For example, failovers and outages are transparent to the end customers, customer write quotas are auto-expanding to accommodate organic growth, increases in write traffic automatically result in provisioning storage resources, and customers can use consumer-provided “checkpoints” to restart the reading process from where they left off.</span></p>
+<h2><span style="font-weight: 400;">The future evolution of Scribe</span></h2>
+<p><span style="font-weight: 400;">Scribe has grown organically for more than a decade, and its design has evolved along the way. Among the opportunities for continued refinement of Scribe is further simplification of the overall system, which would involve coalescing the numerous distinct components, as well as encapsulating Facebook-specific infrastructure in the form of optional plugins. In addition to such simplification efforts, we are working to extend Scribe with new features to support the changing needs of our customers: For example, we are currently evaluating the explicit exposure of different delivery guarantees, such as at-least-once and exactly-once. In addition, we have been enriching the Read Service with caching and filtering capabilities in order to optimize use cases for customers who need to read the same logs multiple times and/or are interested in filtering a category&#8217;s structured logs based on their content. Finally, we have been working to ensure that every aspect of Scribe — from our sharding mechanism and placement policies to our disaster-recovery readiness —  keeps pace with the volume of logs we process daily.</span></p>
+<p><span style="font-weight: 400;">An interesting pattern that arose during the multiple rewrites of Scribe is that its API and the architectural decisions behind it started resembling those of other large-scale messaging systems. The main motivation for continuing to evolve Scribe, rather than migrating our use cases to one of those other systems, is Scribe’s ability to self-manage, self-scale, and self-heal, even in the case of large-scale catastrophic failures. These requirements are rigid, given the multitenant offering of Scribe. Hence, these requirements are built into its design, each of its components, and the components’ synergy. Other systems typically rely on third-party solutions for features such as auto-scaling and disaster recovery. </span></p>
+<p><span style="font-weight: 400;">In summary, Scribe is a highly available system and service that has evolved on pace with our expanding tools and services over the past 12 years, becoming increasingly resilient. We are excited to see what the future holds for Scribe, and we are very eager to increase its scalability and fault tolerance even further, while we continue to simplify its implementation. We hope that these simplification efforts can pave the way toward open-sourcing Scribe again at some point in the future.</span></p>
+<p>&nbsp;</p>
+<div class="sharedaddy sd-sharing-enabled"><div class="robots-nocontent sd-block sd-social sd-social-icon-text sd-sharing"><h3 class="sd-title">Share this:</h3><div class="sd-content"><ul><li class="share-facebook"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-facebook-13563"
+				class="share-facebook sd-button share-icon"
+				href="https://engineering.fb.com/2019/10/07/data-infrastructure/scribe/?share=facebook"
+				target="_blank"
+				aria-labelledby="sharing-facebook-13563"
+				>
+				<span id="sharing-facebook-13563" hidden>Share on Facebook (Opens in new window)</span>
+				<span>Facebook</span>
+			</a></li><li class="share-threads"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-threads-13563"
+				class="share-threads sd-button share-icon"
+				href="https://engineering.fb.com/2019/10/07/data-infrastructure/scribe/?share=threads"
+				target="_blank"
+				aria-labelledby="sharing-threads-13563"
+				>
+				<span id="sharing-threads-13563" hidden>Share on Threads (Opens in new window)</span>
+				<span>Threads</span>
+			</a></li><li class="share-jetpack-whatsapp"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-whatsapp-13563"
+				class="share-jetpack-whatsapp sd-button share-icon"
+				href="https://engineering.fb.com/2019/10/07/data-infrastructure/scribe/?share=jetpack-whatsapp"
+				target="_blank"
+				aria-labelledby="sharing-whatsapp-13563"
+				>
+				<span id="sharing-whatsapp-13563" hidden>Share on WhatsApp (Opens in new window)</span>
+				<span>WhatsApp</span>
+			</a></li><li class="share-linkedin"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-linkedin-13563"
+				class="share-linkedin sd-button share-icon"
+				href="https://engineering.fb.com/2019/10/07/data-infrastructure/scribe/?share=linkedin"
+				target="_blank"
+				aria-labelledby="sharing-linkedin-13563"
+				>
+				<span id="sharing-linkedin-13563" hidden>Share on LinkedIn (Opens in new window)</span>
+				<span>LinkedIn</span>
+			</a></li><li class="share-reddit"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-reddit-13563"
+				class="share-reddit sd-button share-icon"
+				href="https://engineering.fb.com/2019/10/07/data-infrastructure/scribe/?share=reddit"
+				target="_blank"
+				aria-labelledby="sharing-reddit-13563"
+				>
+				<span id="sharing-reddit-13563" hidden>Share on Reddit (Opens in new window)</span>
+				<span>Reddit</span>
+			</a></li><li class="share-x"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-x-13563"
+				class="share-x sd-button share-icon"
+				href="https://engineering.fb.com/2019/10/07/data-infrastructure/scribe/?share=x"
+				target="_blank"
+				aria-labelledby="sharing-x-13563"
+				>
+				<span id="sharing-x-13563" hidden>Share on X (Opens in new window)</span>
+				<span>X</span>
+			</a></li><li class="share-bluesky"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-bluesky-13563"
+				class="share-bluesky sd-button share-icon"
+				href="https://engineering.fb.com/2019/10/07/data-infrastructure/scribe/?share=bluesky"
+				target="_blank"
+				aria-labelledby="sharing-bluesky-13563"
+				>
+				<span id="sharing-bluesky-13563" hidden>Share on Bluesky (Opens in new window)</span>
+				<span>Bluesky</span>
+			</a></li><li class="share-mastodon"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-mastodon-13563"
+				class="share-mastodon sd-button share-icon"
+				href="https://engineering.fb.com/2019/10/07/data-infrastructure/scribe/?share=mastodon"
+				target="_blank"
+				aria-labelledby="sharing-mastodon-13563"
+				>
+				<span id="sharing-mastodon-13563" hidden>Share on Mastodon (Opens in new window)</span>
+				<span>Mastodon</span>
+			</a></li><li class="share-custom share-custom-hackernews"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-custom-13563"
+				class="share-custom share-custom-hackernews sd-button share-icon"
+				href="https://engineering.fb.com/2019/10/07/data-infrastructure/scribe/?share=custom-1699562127"
+				target="_blank"
+				aria-labelledby="sharing-custom-13563"
+				>
+				<span id="sharing-custom-13563" hidden>Share on Hacker News (Opens in new window)</span>
+				<span style="background-image:url(&quot;https://news.ycombinator.com/y18.svg&quot;);">Hacker News</span>
+			</a></li><li class="share-email"><a rel="nofollow noopener noreferrer"
+				data-shared="sharing-email-13563"
+				class="share-email sd-button share-icon"
+				href="mailto:?subject=%5BShared%20Post%5D%20Scribe%3A%20Transporting%20petabytes%20per%20hour%20via%20a%20distributed%2C%20buffered%20queueing%20system&#038;body=https%3A%2F%2Fengineering.fb.com%2F2019%2F10%2F07%2Fdata-infrastructure%2Fscribe%2F&#038;share=email"
+				target="_blank"
+				aria-labelledby="sharing-email-13563"
+				data-email-share-error-title="Do you have email set up?" data-email-share-error-text="If you&#039;re having problems sharing via email, you might not have email set up for your browser. You may need to create a new email yourself." data-email-share-nonce="b2645007fc" data-email-share-track-url="https://engineering.fb.com/2019/10/07/data-infrastructure/scribe/?share=email">
+				<span id="sharing-email-13563" hidden>Email a link to a friend (Opens in new window)</span>
+				<span>Email</span>
+			</a></li><li class="share-end"></li></ul></div></div></div>
+		
+	</div><!-- .entry-content -->
+
+
+</article><!-- #post-## -->
+
+<footer class="entry-footer">
+
+	
+</footer><!-- .entry-footer -->
+
+<div class="fb-like"
+	 data-href="https://engineering.fb.com/2019/10/07/data-infrastructure/scribe/"
+	 data-width=""
+	 data-layout="standard"
+	 data-action="like"
+	 data-size="small"
+	 data-share="true">
+</div>
+
+
+<div class="related-articles">
+	<div class="related-articles__header">
+		<h3 class="related-articles__header__headline">Read More in Data Infrastructure</h3>
+		<a
+			aria-label="View all articles in this Data Infrastructure"
+			class="related-articles__header__link"
+			href="https://engineering.fb.com/category/data-infrastructure/"
+		>
+			View All		</a>
+	</div>
+
+	<div class="article-grids related-articles__grid">
+		<div class="row">
+							<div class="article-grid col-12 col-md-4">
+					
+<article class="post post-13563 type-post status-publish format-standard has-post-thumbnail hentry category-core-infra category-data-infrastructure fb_content_type-article" id="post-24763">
+	<img width="580" height="326" src="https://engineering.fb.com/wp-content/uploads/2026/10/Prometheus-NAO_-5-1.jpg?w=580&amp;h=326&amp;crop=1" class="attachment-thumbnail size-thumbnail" alt="" title="Prometheus NAO+_-5 (1)" />
+<header class="entry-header">
+		<div class="entry-header__top">
+			<span class="posted-on">
+				<time class="entry-date published" datetime="2026-10-19T06:00:10-07:00">
+					OCT 19, 2026				</time>
+			</span>
+		</div>
+
+		<div class="entry-title">
+			<div>
+				<a href="https://engineering.fb.com/2026/10/19/data-center-engineering/inside-prometheus-meta-gigawatt-scale-supercluster/" rel="bookmark" aria-label="Read More about Inside Prometheus: Meta’s Journey to a Gigawatt-Scale Supercluster">
+					Inside Prometheus: Meta’s Journey to a Gigawatt-Scale Supercluster				</a>
+			</div>
+		</div>
+
+	</header><!-- .entry-header -->
+
+</article><!-- #post-## -->
+				</div><!-- /.article-grid -->
+							<div class="article-grid col-12 col-md-4">
+					
+<article class="post post-13563 type-post status-publish format-standard has-post-thumbnail hentry category-core-infra category-data-infrastructure fb_content_type-article" id="post-24657">
+	<img width="580" height="326" src="https://engineering.fb.com/wp-content/uploads/2026/10/OCP-2026-Omar-Baldonado-Meta.jpg?w=580&amp;h=326&amp;crop=1" class="attachment-thumbnail size-thumbnail" alt="" loading="lazy" title="OCP 2026 Omar Baldonado Meta" />
+<header class="entry-header">
+		<div class="entry-header__top">
+			<span class="posted-on">
+				<time class="entry-date published" datetime="2026-10-12T14:19:18-07:00">
+					OCT 12, 2026				</time>
+			</span>
+		</div>
+
+		<div class="entry-title">
+			<div>
+				<a href="https://engineering.fb.com/2026/10/12/open-source/ocp-summit-2026-powering-ai-with-open-innovations-in-scale-up-scale-out-and-scale-across-networks/" rel="bookmark" aria-label="Read More about OCP Summit 2026: Powering AI with Open Innovations in Scale-Up, Scale-Out, and Scale-Across Networks">
+					OCP Summit 2026: Powering AI with Open Innovations in Scale-Up, Scale-Out, and Scale-Across Networks				</a>
+			</div>
+		</div>
+
+	</header><!-- .entry-header -->
+
+</article><!-- #post-## -->
+				</div><!-- /.article-grid -->
+							<div class="article-grid col-12 col-md-4">
+					
+<article class="post post-13563 type-post status-publish format-standard has-post-thumbnail hentry category-core-infra category-data-infrastructure fb_content_type-article" id="post-24625">
+	<img width="580" height="326" src="https://engineering.fb.com/wp-content/uploads/2026/10/MoQ-Instagram-Live-Meta-Hero.png?w=580&amp;h=326&amp;crop=1" class="attachment-thumbnail size-thumbnail" alt="" loading="lazy" title="MoQ Instagram Live Meta - Hero" />
+<header class="entry-header">
+		<div class="entry-header__top">
+			<span class="posted-on">
+				<time class="entry-date published" datetime="2026-10-12T09:01:32-07:00">
+					OCT 12, 2026				</time>
+			</span>
+		</div>
+
+		<div class="entry-title">
+			<div>
+				<a href="https://engineering.fb.com/2026/10/12/video-engineering/shipping-media-over-quic-at-meta-scale-for-instagram-live-ingest/" rel="bookmark" aria-label="Read More about Shipping Media Over QUIC at Meta Scale for Instagram Live Ingest">
+					Shipping Media Over QUIC at Meta Scale for Instagram Live Ingest				</a>
+			</div>
+		</div>
+
+	</header><!-- .entry-header -->
+
+</article><!-- #post-## -->
+				</div><!-- /.article-grid -->
+							<div class="article-grid col-12 col-md-4">
+					
+<article class="post post-13563 type-post status-publish format-standard has-post-thumbnail hentry category-core-infra category-data-infrastructure fb_content_type-article" id="post-24399">
+	<img width="580" height="326" src="https://engineering.fb.com/wp-content/uploads/2026/08/MetaRoCE-HERO-final.png?w=580&amp;h=326&amp;crop=1" class="attachment-thumbnail size-thumbnail" alt="" loading="lazy" />
+<header class="entry-header">
+		<div class="entry-header__top">
+			<span class="posted-on">
+				<time class="entry-date published" datetime="2026-08-24T11:02:29-07:00">
+					AUG 24, 2026				</time>
+			</span>
+		</div>
+
+		<div class="entry-title">
+			<div>
+				<a href="https://engineering.fb.com/2026/08/24/networking-traffic/metaroce-rdma-transport-ai-ethernet/" rel="bookmark" aria-label="Read More about MetaRoCE: A New RDMA Transport Built for AI-Scale Ethernet">
+					MetaRoCE: A New RDMA Transport Built for AI-Scale Ethernet				</a>
+			</div>
+		</div>
+
+	</header><!-- .entry-header -->
+
+</article><!-- #post-## -->
+				</div><!-- /.article-grid -->
+							<div class="article-grid col-12 col-md-4">
+					
+<article class="post post-13563 type-post status-publish format-standard has-post-thumbnail hentry category-core-infra category-data-infrastructure fb_content_type-article" id="post-24394">
+	<img width="580" height="326" src="https://engineering.fb.com/wp-content/uploads/2026/08/Meta-MTIA-300-Hero-final.png?w=580&amp;h=326&amp;crop=1" class="attachment-thumbnail size-thumbnail" alt="" loading="lazy" title="Meta MTIA 300 - Hero - final" />
+<header class="entry-header">
+		<div class="entry-header__top">
+			<span class="posted-on">
+				<time class="entry-date published" datetime="2026-08-24T10:45:52-07:00">
+					AUG 24, 2026				</time>
+			</span>
+		</div>
+
+		<div class="entry-title">
+			<div>
+				<a href="https://engineering.fb.com/2026/08/24/networking-traffic/mtia-300-meta-training-chip-built-in-nics/" rel="bookmark" aria-label="Read More about MTIA 300: Meta&#8217;s First Training Chip with Built-in NICs and Communication-Offloading Engines">
+					MTIA 300: Meta&#8217;s First Training Chip with Built-in NICs and Communication-Offloading Engines				</a>
+			</div>
+		</div>
+
+	</header><!-- .entry-header -->
+
+</article><!-- #post-## -->
+				</div><!-- /.article-grid -->
+							<div class="article-grid col-12 col-md-4">
+					
+<article class="post post-13563 type-post status-publish format-standard has-post-thumbnail hentry category-core-infra category-data-infrastructure fb_content_type-article" id="post-23996">
+	<img width="580" height="326" src="https://engineering.fb.com/wp-content/uploads/2026/05/Meta-Mult-stage-Ads-Ranking.png?w=580&amp;h=326&amp;crop=1" class="attachment-thumbnail size-thumbnail" alt="" loading="lazy" />
+<header class="entry-header">
+		<div class="entry-header__top">
+			<span class="posted-on">
+				<time class="entry-date published" datetime="2026-08-05T12:20:20-07:00">
+					AUG 5, 2026				</time>
+			</span>
+		</div>
+
+		<div class="entry-title">
+			<div>
+				<a href="https://engineering.fb.com/2026/08/05/ml-applications/from-user-sequences-to-scaling-laws-a-multi-stage-architecture-for-metas-ads-ranking/" rel="bookmark" aria-label="Read More about From User Sequences to Scaling Laws: A Multi-Stage Architecture for Meta’s Ads Ranking">
+					From User Sequences to Scaling Laws: A Multi-Stage Architecture for Meta’s Ads Ranking				</a>
+			</div>
+		</div>
+
+	</header><!-- .entry-header -->
+
+</article><!-- #post-## -->
+				</div><!-- /.article-grid -->
+					</div><!-- /.row -->
+	</div><!--/.article-grids -->
+
+</div><!-- /.related-articles -->
+
+					
+	 <!-- include the carousel nav here. -->
+
+		
+				
+			
+		</main><!-- #main -->
+
+	</div><!-- #primary -->
+
+		<!-- Do the right sidebar check. -->
+	
+
+
+  
+<div class="col-md-4 widget-area" id="right-sidebar" role="complementary">
+	<aside id="fb_related_post_widget-4" class="widget widget_fb_related_post_widget"><h3 class="widget-title">Related Posts</h3><hr>
+            <div class="aside-related-projects"><div class="article-grid-redesign">
+              <article class="post-13474 post type-post status-publish has-post-thumbnail hentry" id="post-13474">
+								<a href="https://engineering.fb.com/2019/09/25/networking-traffic/networking-scale-2019/" rel="bookmark" aria-label="Read More about Networking @Scale 2019 recap">
+									<img width="580" height="326" src="https://engineering.fb.com/wp-content/uploads/2019/09/netatscale.jpg?w=580&#038;h=326&#038;crop=1" class="wp-post-image" alt="" srcset="https://engineering.fb.com/wp-content/uploads/2019/09/netatscale.jpg?w=580&#038;h=326&#038;crop=1 580w, https://engineering.fb.com/wp-content/uploads/2019/09/netatscale.jpg?w=580&#038;h=326&#038;crop=1 326w" sizes="(max-width: 580px) 100vw, 580px" loading="lazy">
+									<header class="entry-header">
+										<span class="posted-on"><time class="entry-date published" datetime="Sep 25, 2019">Sep 25, 2019</time></span>
+										<h4 class="entry-title">Networking @Scale 2019 recap</h4>
+									</header><!-- .entry-header -->
+								</a>
+              </article><!-- #post-## -->
+              </div><div class="article-grid-redesign">
+              <article class="post-13398 post type-post status-publish has-post-thumbnail hentry" id="post-13398">
+								<a href="https://engineering.fb.com/2019/08/20/data-infrastructure/off-facebook-activity/" rel="bookmark" aria-label="Read More about Redesigning our systems to provide more control over Off-Facebook activity">
+									<img width="580" height="326" src="https://engineering.fb.com/wp-content/uploads/2019/08/hero_blue_2000x1125.png?w=580&#038;h=326&#038;crop=1" class="wp-post-image" alt="" srcset="https://engineering.fb.com/wp-content/uploads/2019/08/hero_blue_2000x1125.png?w=580&#038;h=326&#038;crop=1 580w, https://engineering.fb.com/wp-content/uploads/2019/08/hero_blue_2000x1125.png?w=580&#038;h=326&#038;crop=1 326w" sizes="(max-width: 580px) 100vw, 580px" loading="lazy">
+									<header class="entry-header">
+										<span class="posted-on"><time class="entry-date published" datetime="Aug 20, 2019">Aug 20, 2019</time></span>
+										<h4 class="entry-title">Redesigning our systems to provide more control over Off-Facebook activity</h4>
+									</header><!-- .entry-header -->
+								</a>
+              </article><!-- #post-## -->
+              </div><div class="article-grid-redesign">
+              <article class="post-13060 post type-post status-publish has-post-thumbnail hentry" id="post-13060">
+								<a href="https://engineering.fb.com/2019/05/28/data-infrastructure/dhcplb-server/" rel="bookmark" aria-label="Read More about Extending DHCPLB: The path from load balancer to server">
+									<img width="580" height="326" src="https://engineering.fb.com/wp-content/uploads/2019/05/DHCP.jpg?w=580&#038;h=326&#038;crop=1" class="wp-post-image" alt="" srcset="https://engineering.fb.com/wp-content/uploads/2019/05/DHCP.jpg?w=580&#038;h=326&#038;crop=1 580w, https://engineering.fb.com/wp-content/uploads/2019/05/DHCP.jpg?w=580&#038;h=326&#038;crop=1 326w" sizes="(max-width: 580px) 100vw, 580px" loading="lazy">
+									<header class="entry-header">
+										<span class="posted-on"><time class="entry-date published" datetime="May 28, 2019">May 28, 2019</time></span>
+										<h4 class="entry-title">Extending DHCPLB: The path from load balancer to server</h4>
+									</header><!-- .entry-header -->
+								</a>
+              </article><!-- #post-## -->
+              </div></div></aside><aside id="wpb_widget-3" class="widget widget_wpb_widget"><h3 class="widget-title">Related Positions</h3><hr><ul class="available-positions-list"><li class="available-positions-item">
+                          <a href=https://www.metacareers.com/jobs/1600320521294242/>
+                      		<div class="job-description">
+                      			Senior Staff Machine Learning Engineer
+                      		</div>
+                      		<div class="job-location">
+                      			TEL AVIV, IL
+                      		</div>
+                          </a>
+                      	</li><li class="available-positions-item">
+                          <a href=https://www.metacareers.com/jobs/1600320521294242/>
+                      		<div class="job-description">
+                      			Senior Staff Machine Learning Engineer
+                      		</div>
+                      		<div class="job-location">
+                      			LONDON, GB
+                      		</div>
+                          </a>
+                      	</li><li class="available-positions-item">
+                          <a href=https://www.metacareers.com/jobs/2343600073094333/>
+                      		<div class="job-description">
+                      			Director Software Engineering - Central Integrity
+                      		</div>
+                      		<div class="job-location">
+                      			BELLEVUE, US
+                      		</div>
+                          </a>
+                      	</li><li class="available-positions-item">
+                          <a href=https://www.metacareers.com/jobs/2343600073094333/>
+                      		<div class="job-description">
+                      			Director Software Engineering - Central Integrity
+                      		</div>
+                      		<div class="job-location">
+                      			MENLO PARK, US
+                      		</div>
+                          </a>
+                      	</li><li class="available-positions-item">
+                          <a href=https://www.metacareers.com/jobs/2343600073094333/>
+                      		<div class="job-description">
+                      			Director Software Engineering - Central Integrity
+                      		</div>
+                      		<div class="job-location">
+                      			SEATTLE, US
+                      		</div>
+                          </a>
+                      	</li>		</ul>
+		<a href="https://www.metacareers.com">
+			<div class="btn available-positions-btn">
+				See All Jobs			</div>
+		</a>
+		</aside>
+</div><!-- #secondary -->
+
+
+
+	<!-- <php get_template_part('content-single-side-bar'); ?> -->
+
+	<!-- Do the right sidebar check. -->
+	
+</div><!-- Container end -->
+
+</div><!-- Wrapper end -->
+
+</div>
+
+	<!-- ******************* The Footer Full-width Widget Area ******************* -->
+
+	<div class="wrapper wrapper-community-outer">
+		<div class="wrapper-community">
+
+			<div class="community" tabindex="-1">
+
+				<div class="row">
+					<!-- community section is generated through WordPress widget -->
+					<div id="wpb_widget-2" class="footer-widget widget_wpb_widget widget-count-3 col-md-4"><h3 class="widget-title">Available Positions</h3><hr><ul class="available-positions-list"><li class="available-positions-item">
+                          <a href=https://www.metacareers.com/jobs/1600320521294242/>
+                      		<div class="job-description">
+                      			Senior Staff Machine Learning Engineer
+                      		</div>
+                      		<div class="job-location">
+                      			TEL AVIV, IL
+                      		</div>
+                          </a>
+                      	</li><li class="available-positions-item">
+                          <a href=https://www.metacareers.com/jobs/1600320521294242/>
+                      		<div class="job-description">
+                      			Senior Staff Machine Learning Engineer
+                      		</div>
+                      		<div class="job-location">
+                      			LONDON, GB
+                      		</div>
+                          </a>
+                      	</li><li class="available-positions-item">
+                          <a href=https://www.metacareers.com/jobs/2343600073094333/>
+                      		<div class="job-description">
+                      			Director Software Engineering - Central Integrity
+                      		</div>
+                      		<div class="job-location">
+                      			BELLEVUE, US
+                      		</div>
+                          </a>
+                      	</li><li class="available-positions-item">
+                          <a href=https://www.metacareers.com/jobs/2343600073094333/>
+                      		<div class="job-description">
+                      			Director Software Engineering - Central Integrity
+                      		</div>
+                      		<div class="job-location">
+                      			MENLO PARK, US
+                      		</div>
+                          </a>
+                      	</li><li class="available-positions-item">
+                          <a href=https://www.metacareers.com/jobs/2343600073094333/>
+                      		<div class="job-description">
+                      			Director Software Engineering - Central Integrity
+                      		</div>
+                      		<div class="job-location">
+                      			SEATTLE, US
+                      		</div>
+                          </a>
+                      	</li>		</ul>
+		<a href="https://www.metacareers.com">
+			<div class="btn available-positions-btn">
+				See All Jobs			</div>
+		</a>
+		</div><!-- .footer-widget --><div id="custom_html-2" class="widget_text footer-widget widget_custom_html widget-count-3 col-md-4"><h3 class="widget-title">Technology at Meta</h3><div class="textwidget custom-html-widget"><ul class="stay-connected-lists">
+	<li class="stay-connected-item">
+<img class="footer-fb-engineering stay-connected-item-left" src="/wp-content/themes/code-fb-com/img/meta_logo.png"  alt="footer-fb-engineering" loading="lazy" width="70" height="70">
+		<div class="stay-connected-item-right">
+			<div class="stay-connected-label">
+				Engineering at Meta - X
+			</div>
+			<a onclick='return twitterFollow("Meta_Engineers")'>
+			<button class="btn stay-connected-btn">
+				Follow
+				</button>
+			</a>
+		</div>
+	</li>
+	<li class="stay-connected-item">
+<img class="footer-fb-engineering stay-connected-item-left" src="/wp-content/themes/code-fb-com/img/meta_logo.png"  alt="footer-AI" loading="lazy" width="70" height="70">
+		<div class="stay-connected-item-right">
+			<div class="stay-connected-label">
+				AI at Meta
+			</div>
+			<a href="https://ai.meta.com/blog/">
+			<button class="btn stay-connected-btn">
+				Read
+			</button>
+			</a>
+		</div>
+	</li>
+<li class="stay-connected-item">
+<img class="footer-fb-engineering stay-connected-item-left" src="/wp-content/themes/code-fb-com/img/meta_logo.png"  alt="footer-developers" loading="lazy" width="70" height="70">
+		<div class="stay-connected-item-right">
+			<div class="stay-connected-label">
+				Meta Quest Blog
+			</div>
+			<a href="https://www.meta.com/blog/quest/">
+			<button class="btn stay-connected-btn">
+				Read
+			</button>
+			</a>
+		</div>
+	</li>
+
+	<li class="stay-connected-item">
+<img class="footer-fb-engineering stay-connected-item-left" src="/wp-content/themes/code-fb-com/img/meta_logo.png"  alt="footer-developers" loading="lazy" width="70" height="70">
+		<div class="stay-connected-item-right">
+			<div class="stay-connected-label">
+				Meta for Developers
+			</div>
+			<a href="https://developers.facebook.com/">
+			<button class="btn stay-connected-btn">
+				Read
+			</button>
+			</a>
+		</div>
+	</li>
+	<li class="stay-connected-item">
+<img class="footer-fb-engineering stay-connected-item-left" src="/wp-content/themes/code-fb-com/img/meta_logo.png"  alt="footer-bug-bounty" loading="lazy" width="70" height="70">
+		<div class="stay-connected-item-right">
+			<div class="stay-connected-label">
+				Meta Bug Bounty
+			</div>
+			<a href="https://bugbounty.meta.com/">
+			<button class="btn stay-connected-btn">
+				Learn more
+			</button>
+			</a>
+		</div>
+	</li>
+
+	<li class="stay-connected-item">
+		<img class="stay-connected-item-left" src="/wp-content/themes/code-fb-com/img/rss.png" alt="footer-rss" loading="lazy" width="70" height="70">
+		<div class="stay-connected-item-right">
+			<div class="stay-connected-label">
+				RSS
+			</div>
+			<a href="https://code.facebook.com/posts/rss/">
+			<button class="btn stay-connected-btn">
+				Subscribe
+			</button>
+			</a>
+		</div>
+	</li>
+</ul>
+</div></div><!-- .footer-widget --><div id="custom_html-3" class="widget_text footer-widget widget_custom_html widget-count-3 col-md-4"><h3 class="widget-title">Open Source</h3><div class="textwidget custom-html-widget"><p class="opensource-desc">
+	Meta believes in building community through open source technology. Explore our latest projects in Artificial Intelligence, Data Infrastructure, Development Tools, Front End, Languages, Platforms, Security, Virtual Reality, and more.
+</p>
+<ul class="opensource-cats">
+	<li class="opensource-cat">
+		<img src="/wp-content/themes/code-fb-com/img/android.png" alt="android" loading="lazy" width="50" height="59">
+		<div class="opensource-cap">
+			ANDROID
+		</div>
+	</li>
+	<li class="opensource-cat">
+		<img src="/wp-content/themes/code-fb-com/img/ios.png" alt="ios" loading="lazy" width="48" height="58">
+		<div class="opensource-cap">
+			iOS
+		</div>
+	</li>
+	<li class="opensource-cat">
+		<img src="/wp-content/themes/code-fb-com/img/web.png" alt="web" loading="lazy" width="55" height="49">
+		<div class="opensource-cap">		
+			WEB
+		</div>
+	</li>
+	<li class="opensource-cat">
+		<img src="/wp-content/themes/code-fb-com/img/backend.png" alt="backend" loading="lazy" width="56" height="51">
+		<div class="opensource-cap">
+			BACKEND
+		</div>
+	</li>
+	<li class="opensource-cat">
+		<img src="/wp-content/themes/code-fb-com/img/hardware.png" alt="hardware" loading="lazy" width="55" height="44">
+		<div class="opensource-cap">
+			HARDWARE
+		</div>
+	</li>
+</ul>
+
+<button class="btn opensource-btn" onclick="window.location.href='https://opensource.fb.com/'">
+	Learn More
+</button>
+
+</div></div><!-- .footer-widget -->
+				</div>
+
+			</div>
+			</div>
+
+	</div><!-- #wrapper-footer-full -->
+
+
+<div class="wrapper-footer" id="wrapper-footer">
+	<div class="inner-container">
+		<div class="footer">
+			<div class="row">
+				<div class="col-md-12">
+					<footer class="meta-footer" id="meta-footer">
+						<div class="site-info row justify-content-between">
+							<div class="col-md-5 meta-logo-container">
+								<a href="https://about.facebook.com/">
+									<img src="https://engineering.fb.com/wp-content/themes/code-fb-com/img/meta_logo_full.svg" width="89" height="18" alt="Meta" />
+								</a>
+								<div id="text-2" class="widget widget_text">			<div class="textwidget"><p>Engineering at Meta is a technical news resource for engineers interested in how we solve large-scale technical challenges at Meta.</p>
+</div>
+		</div>							</div>
+							<div class="col-md-6 footer-meta-links-container">
+														<ul class="meta-footer-links">
+									<li class="footer-link"><a href="https://engineering.fb.com">Home</a></li><li class="footer-link"><a href="https://about.meta.com/">Company Info</a></li><li class="footer-link"><a href="https://www.metacareers.com/?ref=engineering.fb.com">Careers</a></li>								</ul>
+							</div>
+						</div>
+					</footer>
+				</div>
+			</div>
+		</div>
+	</div>
+
+		<div class="footer">
+			<div class="row">
+
+				<div class="col-md-12">
+
+					<footer class="site-footer" id="colophon">
+						<div class="inner-container">
+							<div class="site-info row justify-content-between">
+
+								<div class="col-md-4 copyright-container">
+									<div class="copyright"> © 2026 Meta</div>
+								</div>
+
+								<!-- static footer -->
+								<div class="col-md-7 footer-links-container">
+									<ul class="footer-links">
+										<li class="footer-link"><a href="https://www.facebook.com/policies">Terms</a></li><li class="footer-link"><a href="https://www.facebook.com/privacy/policy">Privacy</a></li><li class="footer-link"><a href="https://engineering.fb.com/privacy/">Cookies</a></li><li class="footer-link"><a href="https://www.facebook.com/help">Help</a></li><li class="footer-link"><a href="https://engineering.fb.com/cookie-settings/">Cookie settings</a></li>									</ul>
+								</div>
+							</div>
+						</div><!-- .site-info -->
+
+					</footer><!-- #colophon -->
+
+				</div><!--col end -->
+
+			</div><!-- row end -->
+
+	</div><!-- //.inner-container -->
+</div><!-- wrapper end -->
+
+</div><!-- #page we need this extra closing tag here -->
+
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/code-fb-com/*","/wp-content/themes/understrap/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+    <section class="meta-cookie-banner" id="MetaCookieBanner" aria-labelledby="cookie-banner-title" hidden>
+        <div class="meta-cookie-banner-inner">
+            <h2 id="cookie-banner-title">Allow the use of cookies by Meta on this browser?</h2>
+            <p>We (Meta Platforms Ireland Limited) use cookies on this site. Some of these are essential cookies which are required for the site to work as intended. We also use optional cookies to perform site analytics and measure the performance of content on this site. You have control over the optional cookies that we use. If you choose to "Decline optional cookies", you can continue to use the site but we will be unable to perform site analytics on this site using such cookies and similar technologies. <strong>Learn more about our cookies and third-party providers in our <a href="https://engineering.fb.com/privacy/">Cookies Notice</a>, or you can review or change your choices, including withdraw your consent, at any time in your <a href="https://engineering.fb.com/cookie-settings/">Settings page</a>.</strong></p>
+            <div class="meta-cookie-actions">
+                <button type="button" data-cookie-decline>Decline optional cookies</button>
+                <button type="button" data-cookie-accept>Allow all cookies</button>
+            </div>
+        </div>
+    </section>
+    
+	<script type="text/javascript">
+		window.WPCOM_sharing_counts = {"https://engineering.fb.com/2019/10/07/data-infrastructure/scribe/":13563};
+	</script>
+				
+					<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KZRLGZ8" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+		
+					<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=660742068067366&ev=PageView&noscript=1"/></noscript>
+		<script id="child-understrap-scripts-js-extra">
+var loadmore_params = {"restfulURL":"https://engineering.fb.com/wp-json/fb/v1/loadmore","searchText":"","posts":"{\"page\":0,\"year\":2019,\"monthnum\":10,\"day\":7,\"name\":\"scribe\",\"category_name\":\"core-infra\",\"error\":\"\",\"m\":\"\",\"p\":0,\"post_parent\":\"\",\"subpost\":\"\",\"subpost_id\":\"\",\"attachment\":\"\",\"attachment_id\":0,\"pagename\":\"\",\"page_id\":0,\"second\":\"\",\"minute\":\"\",\"hour\":\"\",\"w\":0,\"tag\":\"\",\"cat\":\"\",\"tag_id\":\"\",\"author\":\"\",\"author_name\":\"\",\"feed\":\"\",\"tb\":\"\",\"paged\":0,\"meta_key\":\"\",\"meta_value\":\"\",\"preview\":\"\",\"s\":\"\",\"sentence\":\"\",\"title\":\"\",\"fields\":\"all\",\"menu_order\":\"\",\"embed\":\"\",\"category__in\":[],\"category__not_in\":[],\"category__and\":[],\"post__in\":[],\"post__not_in\":[],\"post_name__in\":[],\"tag__in\":[],\"tag__not_in\":[],\"tag__and\":[],\"tag_slug__in\":[],\"tag_slug__and\":[],\"post_parent__in\":[],\"post_parent__not_in\":[],\"author__in\":[],\"author__not_in\":[],\"search_columns\":[],\"ignore_sticky_posts\":false,\"suppress_filters\":false,\"cache_results\":true,\"update_post_term_cache\":true,\"update_menu_item_cache\":false,\"lazy_load_term_meta\":true,\"update_post_meta_cache\":true,\"post_type\":\"\",\"posts_per_page\":12,\"nopaging\":false,\"comments_per_page\":\"50\",\"no_found_rows\":false,\"order\":\"DESC\"}","current_page":"1","max_page":"0","post_type":"post"};
+var search_params = {"ajaxurl":"https://engineering.fb.com/wp-admin/admin-ajax.php","posts":"{\"page\":0,\"year\":2019,\"monthnum\":10,\"day\":7,\"name\":\"scribe\",\"category_name\":\"core-infra\",\"error\":\"\",\"m\":\"\",\"p\":0,\"post_parent\":\"\",\"subpost\":\"\",\"subpost_id\":\"\",\"attachment\":\"\",\"attachment_id\":0,\"pagename\":\"\",\"page_id\":0,\"second\":\"\",\"minute\":\"\",\"hour\":\"\",\"w\":0,\"tag\":\"\",\"cat\":\"\",\"tag_id\":\"\",\"author\":\"\",\"author_name\":\"\",\"feed\":\"\",\"tb\":\"\",\"paged\":0,\"meta_key\":\"\",\"meta_value\":\"\",\"preview\":\"\",\"s\":\"\",\"sentence\":\"\",\"title\":\"\",\"fields\":\"all\",\"menu_order\":\"\",\"embed\":\"\",\"category__in\":[],\"category__not_in\":[],\"category__and\":[],\"post__in\":[],\"post__not_in\":[],\"post_name__in\":[],\"tag__in\":[],\"tag__not_in\":[],\"tag__and\":[],\"tag_slug__in\":[],\"tag_slug__and\":[],\"post_parent__in\":[],\"post_parent__not_in\":[],\"author__in\":[],\"author__not_in\":[],\"search_columns\":[],\"ignore_sticky_posts\":false,\"suppress_filters\":false,\"cache_results\":true,\"update_post_term_cache\":true,\"update_menu_item_cache\":false,\"lazy_load_term_meta\":true,\"update_post_meta_cache\":true,\"post_type\":\"\",\"posts_per_page\":12,\"nopaging\":false,\"comments_per_page\":\"50\",\"no_found_rows\":false,\"order\":\"DESC\"}","current_page":"1","max_page":"0","article_filter":"5f11d72063"};
+var more_articles = {"next_article":{"label":"Next","permalink":"https://engineering.fb.com/2019/10/15/networking-traffic/systems-scale-2019/","title":"Systems @Scale 2019 New York recap","thumbnail":["https://engineering.fb.com/wp-content/uploads/2019/10/Sys@hero.jpg?w=580&h=326&crop=1",580,326,true]},"prev_article":{"label":"Prev","permalink":"https://ai.facebook.com/blog/neural-code-search-evaluation-dataset/","title":"Releasing a new benchmark and data set for evaluating neural code search models","thumbnail":["https://engineering.fb.com/wp-content/uploads/2019/10/RIBgreenHero.jpg?w=580&h=326&crop=1",580,326,true]}};
+//# sourceURL=child-understrap-scripts-js-extra
+</script>
+<script id="child-understrap-scripts-js-before">
+if (!document.getElementById("facebook-jssdk")) { var metaCookieSdkMarker = document.createElement("script"); metaCookieSdkMarker.id = "facebook-jssdk"; metaCookieSdkMarker.type = "application/json"; metaCookieSdkMarker.textContent = "{}"; document.head.appendChild(metaCookieSdkMarker); }
+//# sourceURL=child-understrap-scripts-js-before
+</script>
+<script id="child-understrap-scripts-js" src="https://engineering.fb.com/wp-content/themes/code-fb-com/dist/js/child-theme.min.js?ver=meta-site-cookies-1.2.1"></script>
+<script type="text/javascript" src="https://engineering.fb.com/_static/??/wp-content/themes/code-fb-com/js/prism.js,/wp-content/plugins/meta-site-cookies/media.js?m=1791254704j" ></script><script id="sharing-js-js-extra">
+var sharing_js_options = {"lang":"en","counts":"1","is_stats_active":""};
+//# sourceURL=sharing-js-js-extra
+</script>
+<script id="sharing-js-js" src="https://engineering.fb.com/wp-content/mu-plugins/jetpack-16.3/_inc/build/sharedaddy/sharing.min.js?ver=16.3.1"></script>
+<script id="sharing-js-js-after">
+window.WPCOM_sharing_popups = window.WPCOM_sharing_popups || {};
+window.WPCOM_sharing_popups[ "facebook" ] = "menubar=1,resizable=1,width=600,height=400";
+window.WPCOM_sharing_popups = window.WPCOM_sharing_popups || {};
+window.WPCOM_sharing_popups[ "threads" ] = "menubar=1,resizable=1,width=600,height=400";
+window.WPCOM_sharing_popups = window.WPCOM_sharing_popups || {};
+window.WPCOM_sharing_popups[ "linkedin" ] = "menubar=1,resizable=1,width=580,height=450";
+window.WPCOM_sharing_popups = window.WPCOM_sharing_popups || {};
+window.WPCOM_sharing_popups[ "x" ] = "menubar=1,resizable=1,width=600,height=350";
+window.WPCOM_sharing_popups = window.WPCOM_sharing_popups || {};
+window.WPCOM_sharing_popups[ "bluesky" ] = "menubar=1,resizable=1,width=600,height=400";
+window.WPCOM_sharing_popups = window.WPCOM_sharing_popups || {};
+window.WPCOM_sharing_popups[ "mastodon" ] = "menubar=1,resizable=1,width=460,height=400";
+//# sourceURL=sharing-js-js-after
+</script>
+<script id="wp-emoji-settings" type="application/json">
+{"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://engineering.fb.com/wp-includes/js/wp-emoji-release.min.js?ver=7.1.3"}}
+</script>
+<script type="module">
+/*! This file is auto-generated */
+var e="script#wp-emoji-settings",t=document.querySelector(e);if(!(t instanceof HTMLScriptElement))throw new Error("Element missing: "+e);const r=JSON.parse(t.text),s=(window._wpemojiSettings=r,"wpEmojiSettingsSupports"),o=["flag","emoji"];function i(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(s,JSON.stringify(t))}catch(e){}}function c(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0);const r=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);return t.every((e,t)=>e===r[t])}function p(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var n=e.getImageData(16,16,1,1);for(let e=0;e<n.data.length;e++)if(0!==n.data[e])return!1;return!0}function u(e,t,n,r){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!r(e,"\ud83e\u1fac8")}return!1}function f(e,t,n,r){let a;const s=(a="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement("canvas")).getContext("2d",{willReadFrequently:!0}),o=(s.textBaseline="top",s.font="600 32px Arial",{});return e.forEach(e=>{o[e]=t(s,e,n,r)}),o}function a(e){var t=document.createElement("script");t.src=e,t.defer=!0,document.head.appendChild(t)}r.supports={everything:!0,everythingExceptFlag:!0},new Promise(t=>{let n=function(){try{var e=JSON.parse(sessionStorage.getItem(s));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(o),u.toString(),c.toString(),p.toString()].join(",")+"));",r=new Blob([e],{type:"text/javascript"});const a=new Worker(URL.createObjectURL(r),{name:"wpTestEmojiSupports"});return void(a.onmessage=e=>{i(n=e.data),a.terminate(),t(n)})}catch(e){}i(n=f(o,u,c,p))}t(n)}).then(e=>{for(const n in e)r.supports[n]=e[n],r.supports.everything=r.supports.everything&&r.supports[n],"flag"!==n&&(r.supports.everythingExceptFlag=r.supports.everythingExceptFlag&&r.supports[n]);var t;r.supports.everythingExceptFlag=r.supports.everythingExceptFlag&&!r.supports.flag,r.supports.everything||((t=r.source||{}).concatemoji?a(t.concatemoji):t.wpemoji&&t.twemoji&&(a(t.twemoji),a(t.wpemoji)))});
+//# sourceURL=https://engineering.fb.com/wp-includes/js/wp-emoji-loader.min.js
+</script>
+
+</body>
+
+</html>
